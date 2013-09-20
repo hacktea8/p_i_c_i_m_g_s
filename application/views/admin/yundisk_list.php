@@ -43,10 +43,39 @@ var CLICK_EDIT_CONTENT = '点击修改内容';
 	<div class="img-button "><p><input type="button" id="editData" name="editData" value="编辑" onclick="editData(this,'checkList')" class="editData"></p></div>
 </div>
 <!-- Think 系统列表组件开始 -->
-<table id="checkList" class="table-list list" cellpadding="0" cellspacing="0" border="0"><thead><tr><th width="30" class="first"><input type="checkbox" onclick="checkAll('checkList')"></th><th width="50" ><a href="javascript:sortBy('id','','index')" title="按照编号 ">编号</a></th><th width="100" ><a href="javascript:sortBy('class','','index')" title="按照接口代码 ">接口代码</a></th><th width="160" ><a href="javascript:sortBy('name','','index')" title="按照接口名称 ">接口名称</a></th><th width="100" ><a href="javascript:sortBy('sort','','index')" title="按照排序 ">排序</a></th><th width="50" ><a href="javascript:sortBy('status','','index')" title="按照状态 ">状态</a></th><th ><a href="javascript:sortBy('content','','index')" title="按照说明 ">说明</a></th><th width="60">操作</th></tr></thead><tbody></tbody></table>
+<table id="checkList" class="table-list list" cellpadding="0" cellspacing="0" border="0">
+  <thead>
+    <tr>
+	  <th width="30" class="first"><input type="checkbox" onclick="checkAll('checkList')"></th><th width="50" >
+	  <a href="javascript:sortBy('id','','index')" title="按照编号 ">编号</a></th>
+	  <th width="100" ><a href="javascript:void(0);" title="">UID</a></th>
+	  <th width="80" ><a href="javascript:void(0);" title="">access_token</a></th>
+	  <th width="80" ><a href="javascript:void(0);" title=" ">access_token</a></th>
+	  <th width="80" ><a href="javascript:void(0);" title=" ">refresh_token</a></th>
+	  <th width="80" ><a href="javascript:void(0);" title=" ">session_key</a></th>
+	  <th width="80" ><a href="javascript:void(0);" title=" ">session_secret</a></th>
+	  <th width="30" ><a href="javascript:sortBy('sort','','index')" title="按照排序 ">排序</a></th><th width="50" ><a href="javascript:sortBy('status','','index')" title="按照状态 ">状态</a></th><th width="60">操作</th></tr></thead>
+  <tbody>
+    <?php foreach($list as $val){?>
+<tr ="" class="">
+  <td class="first"><input type="checkbox" name="key"	value="<?php echo $val['uid'];?>"></td>
+  <td ><?php echo $val['uid'];?></td>
+  <td align="left" >
+    <span class="pointer" module="AlbumCategory" href="javascript:;" onclick="textEdit(this,'<?php echo $val['uid'];?>','name')"><?php echo $val['uname'];?></span></td>
+   <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['access_token'];?></span></td>
+   <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['refresh_token'];?></span></td>
+   <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['session_key'];?></span></td>
+   <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['session_secret'];?></span></td>
+   <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['sort'];?></span></td>
+  <td ><span class="pointer" module="AlbumCategory" href="javascript:;" onclick="toggleStatus(this,'<?php echo $val['uid'];?>','status')"><img status="1" src="/public/images/status-<?php echo $val['flag'];?>.gif" /></span></td>
+  <td ><span class="pointer" module="AlbumCategory" href="javascript:;" onclick="numberEdit(this,'<?php echo $val['uid'];?>','sort')"><?php echo $val['sort'];?></span></td>
+  <td><a href="javascript:;" onclick="editData(this,'<?php echo $val['uid'];?>','id')">编辑</a>&nbsp;&nbsp;<a href="javascript:;" onclick="removeData(this,'<?php echo $val['uid'];?>','id')">删除</a>&nbsp;&nbsp;</td></tr>
+<?php }?>
+  </tbody>
+</table>
 <!-- Think 系统列表组件结束 -->
 
-<div class="pager"></div>
+<div class="pager"><strong><?php echo $ptotal;?></strong> 条记录&nbsp;│&nbsp;<strong><?php echo $psize;?></strong> / 1 页&nbsp;│&nbsp;<?php echo $pagestr;?>  </div>
 						</div>
 					</td>
 				</tr>

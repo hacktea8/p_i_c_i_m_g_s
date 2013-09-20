@@ -50,6 +50,25 @@ class Imgsmodel extends CI_Model {
 	 return array();
    }
 
+   function getYundiskInfoList($p,$limit=20){
+     $p=($p-1)*$limit;
+     $sql=sprintf('SELECT * FROM `appdisk` ORDER BY `sort` LIMIT %d,%d ',$p,$limit);
+	 $query=$this->db->query($sql);
+     $res=$query->result_array();
+	 if($res){
+	    return $res;
+	 }
+	 return array();
+   }
+   function getYundiskCount(){
+     $sql=sprintf('SELECT count(*) as total FROM `appdisk` ');
+	 $query=$this->db->query($sql);
+     $res=$query->row_array();
+	 if($res){
+	    return $res['total'];
+	 }
+	 return 0;
+   }
    function getCateInfoByCid($cid=0){
      $cid=intval($cid);
 	 $where=$cid?' AND cid='.$cid.' LIMIT 1 ':'';

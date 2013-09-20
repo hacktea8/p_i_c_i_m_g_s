@@ -65,8 +65,15 @@ class Admin extends Adm_webbase {
 	public function system_config(){
 	    $this->load->view('system_config');
 	}
-	public function yundisk_list(){
-	    
+	public function yundisk_list($p=1){
+	    $p=intval($p);
+		$p=$p>0?$p:1;
+		$limit=10;
+        $list=$this->imgsmodel->getYundiskInfoList($p,$limit);
+		$total=$this->imgsmodel->getYundiskCount();
+		$psize=ceil($total/$limit);
+		$pstr=$this->getpagestr('/admin/yundisk_list/',$p,$psize,5);
+        $this->setviewData(array('list'=>$list,'ptotal'=>$total,'psize'=>$psize,'pagestr'=>$pstr));
 	    $this->load->view('yundisk_list',$this->viewData);
 	}
 	public function yundisk_config($key='baiduPcs_app'){
