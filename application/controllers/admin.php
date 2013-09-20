@@ -84,39 +84,38 @@ class Admin extends Adm_webbase {
     public function yundisk_add(){
 	    //require('baidupan.inc.php');
         $this->load->library('baidupcstoken');
-		$appconfig=$this->config->item('baiduPcs_app');
+	$appconfig=$this->config->item('baiduPcs_app');
         $this->baidupcstoken->init($appconfig);
 //var_dump($this->baidupcstoken);exit;
-//$api=new BaiduPanAPI;
 
 $code=isset($_GET['code'])?$_GET['code']:0;
 //$code='1081f2a179068bf543402d290347674d';
 if($code){
-  $oseq=$_GET['seq'];
+ /* $oseq=$_GET['seq'];
   $seq=$this->getSecode();
   if(substr($oseq,0,8)!=substr($seq,0,8)){
      die('error! seq');
   }
-echo $code;
+*/
+//echo $code;
   $html=$this->baidupcstoken->getTokenByInit($code);
+//echo '<pre>';var_dump($uinfo);exit;
   if($html){
-     $uinfo=$this->baidupcstoken->getUserInfo();
-	 if($uinfo){
-		 $data=array();
-		 $data['access_token']=$html['access_token'];
-		 $data['refresh_token']=$html["refresh_token"];
-         $data['session_key']=$html["session_key"];
-		 $data['session_secret']=$html["session_secret"];
-		 $data['uid']=$uinfo['uid'];
-	     $this->imgsmodel->setAppDiskToken($data);
-		 return true;
-	 }
-	 die('error User!');
-  }
+     $data=array();
+     $data['access_token']=$html['access_token'];
+     $data['refresh_token']=$html["refresh_token"];
+     $data['session_key']=$html["session_key"];
+     $data['session_secret']=$html["session_secret"];
+     $data['uid']=$html['uid'];
+     $data['uname']=$html['uname'];
+     $this->imgsmodel->setAppDiskToken($data);
+     header('Location: /admin/yundisk_list');
+     return true;
+   }
   die('error! Token');
 }else{
-	$seq=$this->getSecode();
-    header('Location: '.$this->baidupcstoken->getAuthorizationCodeUrl($seq));
+//	$seq=$this->getSecode();
+    header('Location: '.$this->baidupcstoken->getAuthorizationCodeUrl());
 }
 /**/
 	    echo $_GET['code'];exit;

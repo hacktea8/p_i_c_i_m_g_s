@@ -96,17 +96,17 @@ class Imgsmodel extends CI_Model {
 	  if(isset($row['uid'])){
 	     $uid=$data['uid'];
 		 unset($data['uid']);
-         $this->db->update('appdisk', $data, array('var' => $var));
+         $this->db->update('appdisk', $data, array('uid' => $uid));
 	  }else{
 	     $this->db->insert('appdisk', $data); 
 	  }
    }
    function getAppDiskToken($uid=''){
-	   $where='';
+	   $where=' ORDER BY sort ';
        if($uid){
-	      $where=' AND `uid`=%d LIMIT 1 ';
+	      $where=sprintf(' AND `uid`=%d LIMIT 1 ',$uid);
 	   }
-	   $spl='SELECT * FROM `appdisk` WHERE `flag`=1 '.$where.' ORDER BY sort ';
+	   $sql='SELECT * FROM `appdisk` WHERE `flag`=1 '.$where;
 	   $query=$this->db->query($sql);
        if($uid){
 	      return $query->row_array();

@@ -1,7 +1,7 @@
 <?php
 
 
-class BaiduPCSToken{
+class Baidupcstoken{
   //请根据实际情况更新$access_token与$appName参数
   protected $access_token = '';
   protected $refresh_token = '';
@@ -29,7 +29,7 @@ class BaiduPCSToken{
      return file_put_contents($this->token_config,$info);
   }
 
-  function getAuthorizationCodeUrl($seq){
+  function getAuthorizationCodeUrl($seq=''){
 	  $par='';
 	  if($seq){
 	     $par='&seq='.$seq;
@@ -65,6 +65,13 @@ class BaiduPCSToken{
      $html=json_decode($html,1);
 //var_dump($html);
      if(isset($html['access_token'])){
+        $this->access_token=$html['access_token'];
+        $uinfo=$this->getUserInfo();
+        if(!isset($uinfo['uid'])){
+           return false;
+        }
+        $html['uid']=$uinfo['uid'];
+        $html['uname']=$uinfo['uname'];
         return $html;//return $this->setTokenValue($html['access_token'],$html["refresh_token"],
         //$html["session_key"],$html["session_secret"]);
      }
@@ -83,19 +90,21 @@ class BaiduPCSToken{
      $html=$this->getHtml($param);
      $html=json_decode($html,1);
      if(isset($html['access_token'])){
-		$this->access_token=$html['access_token'];
+	$this->access_token=$html['access_token'];
         return $html;//return $this->setTokenValue($html['access_token'],$html["refresh_token"],
         //$html["session_key"],$html["session_secret"]); 
      }
      return false;
   }
   function getUserInfo(){
+//$this->access_token='3.f669af7dcedc977ecb7da450a3c953ab.2592000.1382261874.3958009-1279321';
      $param=array(
      'url'=>'https://openapi.baidu.com/rest/2.0/passport/users/getLoggedInUser',
      'access_token'=>$this->access_token
      );
      $html=$this->getHtml($param);
      $html=json_decode($html,1);
+var_dump($html);
 	 if(isset($html['uid']))
 		 return $html;
 
