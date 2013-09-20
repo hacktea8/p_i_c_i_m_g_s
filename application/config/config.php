@@ -15,7 +15,7 @@
 |
 */
 $config['base_url']	= '';
-
+$config['custum_config']=dirname(__FILE__).'/website_config.php';
 /*
 |--------------------------------------------------------------------------
 | Index File

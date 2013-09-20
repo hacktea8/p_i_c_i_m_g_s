@@ -14,7 +14,7 @@
 			<span>欢迎您！admin</span>
 			<a class="edit-pwd" href="/admin/index.php?m=Index&a=password" target="mainFrame">修改密码</a>
 			<a class="browse-index" href="../" target="brank">浏览首页</a>
-			<a href="/admin/index.php?m=Cache&a=system" target="mainFrame">更新缓存</a>
+			<a href="/admin/systemcache" target="mainFrame">更新缓存</a>
 			<a href="/admin/index.php?m=Public&a=logout" target="mainFrame">退出</a>
 		</div>
 		<div class="fht-navs">

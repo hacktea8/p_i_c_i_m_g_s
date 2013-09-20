@@ -67,4 +67,62 @@ class Imgsmodel extends CI_Model {
 	 $sql=sprintf('SELECT * FROM `cate` WHERE `flag`=1 AND `title`=\'%s\' LIMIT 1',mysql_real_escape_string($title));
 	 return $this->db->query($sql)->row_array();
    }
+   // Config param
+   function updateConfigByKey($data=''){
+     if(!$data){
+	    return false;
+	 }
+	 $row=$this->getConfigByKey($data['var']);
+	 $var=$data['var'];
+	 unset($data['var']);
+	 $val=serialize($data);
+	 $data=array();
+	 $data['var']=$var;
+	 $data['val']=$val;
+     if(isset($row['var'])){
+	   // $var=$data['var'];
+		unset($data['var']);
+	    $this->db->update('config', $data, array('var' => $var));
+	 }else{
+	    $this->db->insert('config', $data); 
+	    
+	  }
+   }
+   function setAppDiskToken($data){
+      if(!isset($data['uid'])){
+	      return false;
+	  }
+      $row=$this->getAppDiskToken($data['uid']);
+	  if(isset($row['uid'])){
+	     $uid=$data['uid'];
+		 unset($data['uid']);
+         $this->db->update('appdisk', $data, array('var' => $var));
+	  }else{
+	     $this->db->insert('appdisk', $data); 
+	  }
+   }
+   function getAppDiskToken($uid=''){
+	   $where='';
+       if($uid){
+	      $where=' AND `uid`=%d LIMIT 1 ';
+	   }
+	   $spl='SELECT * FROM `appdisk` WHERE `flag`=1 '.$where.' ORDER BY sort ';
+	   $query=$this->db->query($sql);
+       if($uid){
+	      return $query->row_array();
+	   }
+	   return $query->result_array();
+   }
+   function getConfigByKey($key=''){
+	  $where='';
+      if($key){
+	     $where=sprintf('WHERE `var`=\'%s\' LIMIT 1',mysql_real_escape_string($key));
+	  }
+	  $sql='SELECT * FROM `config` '.$where;
+	  $query=$this->db->query($sql);
+	  if($key)
+		  return $query->row_array();
+
+	  return $query->result_array();
+   }
 }

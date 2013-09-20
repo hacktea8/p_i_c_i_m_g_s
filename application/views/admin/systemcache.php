@@ -11,14 +11,14 @@
 <script type="text/javascript">
 <!--
 //指定当前组模块URL地址 
-var URL = '/admin/index.php/AlbumCategory';
+var URL = '/admin/index.php/Cache';
 var ROOT_PATH = '';
-var APP	 =	 '/admin/index.php';
+var APP	 =	 '/admin/systemcache';
 var STATIC = '/admin/Tpl/Default/Static';
 var VAR_MODULE = 'm';
 var VAR_ACTION = 'a';
-var CURR_MODULE = 'AlbumCategory';
-var CURR_ACTION = 'add';
+var CURR_MODULE = 'Cache';
+var CURR_ACTION = 'system';
 
 //定义JS中使用的语言变量
 var CONFIRM_DELETE = '你确定要删除选择项吗？';
@@ -32,59 +32,36 @@ var CLICK_EDIT_CONTENT = '点击修改内容';
 </head>
 <body>
 	<div class="fanwe-body">
-		<div class="fb-title"><div><p><span>美图分类 > 添加分类</span></p></div></div>
+		<div class="fb-title"><div><p><span>缓存管理 > 系统缓存</span></p></div></div>
 		<div class="fb-body">
 			<table class="body-table" cellpadding="0" cellspacing="1" border="0">
 				<tr>
 					<td class="body-table-td">
 						<div class="body-table-div">
-<div class="handle-btns">
-	<div class="link-button "><p><a id="" name="" href="/admin/album_cate" class="">返回列表</a></p></div>
-</div>
-<form method='post' id="form" name="form" action="/admin/ablum_cate_detail" enctype="multipart/form-data">
+<form method='post' id="form" name="form" action="/admin/systemcache">
 <table cellpadding="4" cellspacing="0" border="0" class="table-form">
-    <tr>
-		<th width="150">上级分类</th>
-		<td><select name="row[fid]"><option value='0'>无</option>
-		<?php foreach($rootCate as $val){ if($val['cid']==$info['cid']){continue;} ?>
-        <option value='<?php echo $val['cid'];?>' <?php if(isset($info['fid'])&&$val['cid']==$info['fid']){echo "selected='selected' ";}?> ><?php echo $val['title']?></option>
-		<?php } ?>
+	<tr>
+		<td>
+			<ul class="tipslis">
+				<li>当站点进行了数据修改、恢复、升级或者工作出现异常的时候，你可以使用本功能重新生成缓存。更新缓存的时候，可能让服务器负载升高，请尽量避开会员访问的高峰时间</li>
+				<li>后台数据缓存：更新站点的后台数据缓存</li>
+				<li>前台数据缓存：更新站点的前台系统数据缓存</li>
+				<li>前台模板缓存：更新前台模板缓存文件，当你修改了模板，但是没有立即生效的时候使用</li>
+			</ul>
 		</td>
 	</tr>
 	<tr>
-		<th width="150">分类名称</th>
-		<td><input type="text" class="textinput requireinput" name="row[title]" value="<?php if(isset($info))echo $info['title'];?>" /></td>
-	</tr>
-	<tr>
-		<th>分类图片</th>
-		<td>
-			<input type="text" class="textinput" name="row[cover]" size="120" value="<?php if(isset($info))echo $info['cover'];?>" />
+		<td style="padding-left:30px;">
+			<label><input type="checkbox" name="mod[]" value="1" />&nbsp;<span>后台数据缓存</span></label>&nbsp;&nbsp;
+			<label><input type="checkbox" name="mod[]" value="2" />&nbsp;<span>前台数据缓存</span></label>&nbsp;&nbsp;
+			<label><input type="checkbox" name="mod[]" value="3" />&nbsp;<span>前台模板缓存</span></label>
 		</td>
 	</tr>
 	<tr>
-		<th>排序</th>
-		<td>
-			<input type="text" class="textinput" name="row[sort]" value="<?php if(isset($info))echo $info['sort'];?>" />
-		</td>
-	</tr>
-	<tr>
-		<th>SEO关键字</th>
-		<td>
-			<textarea name="row[keywords]" class="textinput areainput" rows="3"><?php if(isset($info))echo $info['keywords'];?></textarea>
-		</td>
-	</tr>
-	<tr>
-		<th>SEO描述</th>
-		<td>
-			<textarea name="row[description]" class="textinput areainput" rows="3"><?php if(isset($info))echo $info['description'];?></textarea>
-			<?php if(isset($info['cid'])){?> <input type="hidden" name="row['cid']" value="<?php echo $info['cid'];?>" /> <?php } ?>
-		</td>
-	</tr>
-	<tr class="act">
-		<th>&nbsp;</th>
-		<td>
+		<td style="padding-left:30px;">
 			<input type="submit" class="submit_btn" value="提交" />
 			<input type="reset" class="reset_btn" value="重置" />
+
 		</td>
 	</tr>
 </table>

@@ -14,11 +14,13 @@
 				<dd><p><a href="/admin/system_config" target="mainFrame">系统设置</a></p></dd>			</dl><dl>
 				<dt><div><strong>云盘接口管理</strong></div></dt>
 				<dd><p><a href="/admin/yundisk_list" target="mainFrame">接口列表</a></p></dd>
+				<dd><p><a href="/admin/yundisk_config" target="mainFrame">接口配置</a></p></dd>
 				<dd><p><a href="/admin/yundisk_add" target="mainFrame">增加接口</a></p></dd></dl><dl>
 				<dt><div><strong>同步登陆管理</strong></div></dt>
 				<dd><p><a href="/admin/index.php?m=LoginModule&a=index" target="mainFrame">模块列表</a></p></dd>			</dl><dl>
 				<dt><div><strong>缓存管理</strong></div></dt>
-				<dd><p><a href="/admin/index.php?m=Cache&a=system" target="mainFrame">清除系统缓存</a></p></dd><dd><p><a href="/admin/index.php?m=Cache&a=custom" target="mainFrame">清除程序缓存</a></p></dd>			</dl><dl>
+				<dd><p><a href="/admin/systemcache/1" target="mainFrame">清除系统缓存</a></p></dd>
+				<dd><p><a href="/admin/systemcache/2" target="mainFrame">清除程序缓存</a></p></dd>			</dl><dl>
 				<dt><div><strong>临时文件管理</strong></div></dt>
 				<dd><p><a href="/admin/index.php?m=TempFile&a=index" target="mainFrame">临时文件列表</a></p></dd>			</dl><dl>
 				<dt><div><strong>操作日志管理</strong></div></dt>

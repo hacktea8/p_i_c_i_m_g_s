@@ -32,52 +32,32 @@ var CLICK_EDIT_CONTENT = '点击修改内容';
 </head>
 <body>
 	<div class="fanwe-body">
-		<div class="fb-title"><div><p><span>美图分类 > 添加分类</span></p></div></div>
+		<div class="fb-title"><div><p><span>百度网盘API > APP配置</span></p></div></div>
 		<div class="fb-body">
 			<table class="body-table" cellpadding="0" cellspacing="1" border="0">
 				<tr>
 					<td class="body-table-td">
 						<div class="body-table-div">
 <div class="handle-btns">
-	<div class="link-button "><p><a id="" name="" href="/admin/album_cate" class="">返回列表</a></p></div>
+	<div class="link-button "><p><a id="" name="" href="/admin/yundisk_list" class="">返回列表</a></p></div>
 </div>
-<form method='post' id="form" name="form" action="/admin/ablum_cate_detail" enctype="multipart/form-data">
+<form method='post' id="form" name="form" action="/admin/yundisk_config" enctype="multipart/form-data">
 <table cellpadding="4" cellspacing="0" border="0" class="table-form">
-    <tr>
-		<th width="150">上级分类</th>
-		<td><select name="row[fid]"><option value='0'>无</option>
-		<?php foreach($rootCate as $val){ if($val['cid']==$info['cid']){continue;} ?>
-        <option value='<?php echo $val['cid'];?>' <?php if(isset($info['fid'])&&$val['cid']==$info['fid']){echo "selected='selected' ";}?> ><?php echo $val['title']?></option>
-		<?php } ?>
-		</td>
-	</tr>
 	<tr>
-		<th width="150">分类名称</th>
+		<th width="150">应用名称</th>
 		<td><input type="text" class="textinput requireinput" name="row[title]" value="<?php if(isset($info))echo $info['title'];?>" /></td>
 	</tr>
 	<tr>
-		<th>分类图片</th>
+		<th>API Key:</th>
 		<td>
-			<input type="text" class="textinput" name="row[cover]" size="120" value="<?php if(isset($info))echo $info['cover'];?>" />
+			<input type="text" class="textinput" name="row[apikey]" size="100" value="<?php if(isset($info))echo $info['apikey'];?>" />
 		</td>
 	</tr>
 	<tr>
-		<th>排序</th>
+		<th>Secret Key:</th>
 		<td>
-			<input type="text" class="textinput" name="row[sort]" value="<?php if(isset($info))echo $info['sort'];?>" />
-		</td>
-	</tr>
-	<tr>
-		<th>SEO关键字</th>
-		<td>
-			<textarea name="row[keywords]" class="textinput areainput" rows="3"><?php if(isset($info))echo $info['keywords'];?></textarea>
-		</td>
-	</tr>
-	<tr>
-		<th>SEO描述</th>
-		<td>
-			<textarea name="row[description]" class="textinput areainput" rows="3"><?php if(isset($info))echo $info['description'];?></textarea>
-			<?php if(isset($info['cid'])){?> <input type="hidden" name="row['cid']" value="<?php echo $info['cid'];?>" /> <?php } ?>
+			<input type="text" class="textinput" name="row[secretkey]" size="100" value="<?php if(isset($info))echo $info['secretkey'];?>" />
+			<input type="hidden" name="row[var]" value="baiduPcs_app" />
 		</td>
 	</tr>
 	<tr class="act">
