@@ -5,7 +5,7 @@ class Webbase extends CI_Controller {
      protected $userInfo=array();
      public $adminList=array();
      protected $isadmin=0;
-     public $loginurl='http://www.phpwind87.com/login.php';
+     public $loginurl='http://bbs.hacktea8.com/pw_userapi.php';
 
      public function __construct(){
 		parent::__construct();
@@ -14,6 +14,7 @@ class Webbase extends CI_Controller {
 	    $this->userInfo=$this->session->userdata('userInfo');
         $this->setviewData(array('seo_title'=>'','seo_keywords'=>'','seo_description'=>'','base_url'=>$this->config->item('base_url'),'domain_name'=>'',
 			'site_name'=>'图享网'));
+                $this->loginurl=$this->config->item('loginurl');
 	 }
      public function checkLogin(){
 	    if(isset($this->userInfo['uid']) &&$this->userInfo['uid']>0){
