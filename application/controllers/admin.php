@@ -127,26 +127,7 @@ if($code){
 /**/
 	    echo $_GET['code'];exit;
 	}
-	public function getSecode($k='',$mode=1){
-	    $str='';
-		$end=32;
-		$key=$k?$k:'hacktea8baidupcs';
-		$spool='1234567890qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAMNBVCXZ!@#%&*-_+=,~`.,;';
-		if($mode){
-             $t=date('YmdH');
-		     $str=md5(md5($t).md5($key));
-			 $str=substr($str,6,8).substr(md5($spool),4,8);
-             
-		}else{
-			
-		    $len=strlen($spool)-1;
-		    for($i=0;$i<$end;$i++){
-		       $str.=$spool[mt_rand(0,$len)];
-	    	}
-            $str=md5($str).md5($key);
-		}
-		return $str;
-	}
+	
 	public function index_change(){
 	    $this->load->view('index_change');
 	}
