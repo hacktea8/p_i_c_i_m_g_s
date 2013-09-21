@@ -104,7 +104,7 @@ class Webbase extends CI_Controller {
 		$key=$k?$k:$this->config->item('login_send_sec_key');
 		$spool='1234567890qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAMNBVCXZ!@#%&*-_+=,~`.,;';
 		if($mode){
-             $t=date('YmdH');
+             $t=date('YmdHm');
 		     $str=md5(md5($t).md5($key));
 			 $str=substr($str,6,16).substr(md5($spool),4,16);
              
