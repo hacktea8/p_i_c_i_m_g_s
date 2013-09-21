@@ -4,12 +4,15 @@ error_reporting(E_ALL);
 include_once('webbase.php');
 
 class Adm_webbase extends Webbase {
-     protected $userInfo=array();
-     protected $admGroup=array();
+//     protected $userInfo=array();
+//     protected $admGroup=array();
      //protected $
 
 	 public function __construct(){
          parent::__construct();
+             if(!$this->checkIsadmin()){
+                redirect('/');
+             }
 	     $this->load->_ci_tpl_path='admin/';
 	 }
 	/**

@@ -3,7 +3,7 @@
 class Webbase extends CI_Controller {
      public $viewData=array();
      protected $userInfo=array();
-     public $adminList=array();
+     public $adminList=array(3);
      protected $isadmin=0;
      public $loginurl='http://bbs.hacktea8.com/pw_userapi.php';
 
@@ -46,7 +46,7 @@ class Webbase extends CI_Controller {
 		   //var_dump($row);exit;
 		   $seq=substr($this->getSecode(),0,16);
 		   //echo $seq;'<br />';
-		   $row['logintype']=1;
+		   $row['logintype']=0;
 		   $param=array(
 		   'url'=>$this->loginurl,
 		   'uname'=>trim($row['email_name']), 
@@ -56,8 +56,8 @@ class Webbase extends CI_Controller {
 		   'action'=>'login'
 		   );
            $html=$this->getHtml($param);
-		   $html=json_decode($html,1);
 		   //var_dump($html);exit;
+		   $html=json_decode($html,1);
 		   $oseq=substr($html['seq'],0,16);
                    $code=$this->config->item('login_recv_sec_key');
 		   $seq=substr($this->getSecode($code),0,16);
