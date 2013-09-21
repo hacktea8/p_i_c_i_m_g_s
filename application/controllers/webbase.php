@@ -58,7 +58,8 @@ class Webbase extends CI_Controller {
 		   $html=json_decode($html,1);
 		   //var_dump($html);exit;
 		   $oseq=substr($html['seq'],0,16);
-		   $seq=substr($this->getSecode('hacktea8userlogin'),0,16);
+                   $code=$this->config->item('login_recv_sec_key');
+		   $seq=substr($this->getSecode($code),0,16);
 
 		   if($oseq==$seq){
 			   unset($html['seq']);
@@ -99,7 +100,7 @@ class Webbase extends CI_Controller {
 	public function getSecode($k='',$mode=1){
 	    $str='';
 		$end=32;
-		$key=$k?$k:'hacktea8userinfo';
+		$key=$k?$k:$this->config->item('login_send_sec_key');
 		$spool='1234567890qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAMNBVCXZ!@#%&*-_+=,~`.,;';
 		if($mode){
              $t=date('YmdH');

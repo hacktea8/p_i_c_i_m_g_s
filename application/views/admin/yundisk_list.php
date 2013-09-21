@@ -47,9 +47,8 @@ var CLICK_EDIT_CONTENT = '点击修改内容';
   <thead>
     <tr>
 	  <th width="30" class="first"><input type="checkbox" onclick="checkAll('checkList')"></th><th width="50" >
-	  <a href="javascript:sortBy('id','','index')" title="按照编号 ">编号</a></th>
-	  <th width="100" ><a href="javascript:void(0);" title="">UID</a></th>
-	  <th width="80" ><a href="javascript:void(0);" title="">access_token</a></th>
+	  <a href="javascript:sortBy('id','','index')" title="">UID</a></th>
+	  <th width="100" ><a href="javascript:void(0);" title="">用户名</a></th>
 	  <th width="80" ><a href="javascript:void(0);" title=" ">access_token</a></th>
 	  <th width="80" ><a href="javascript:void(0);" title=" ">refresh_token</a></th>
 	  <th width="80" ><a href="javascript:void(0);" title=" ">session_key</a></th>
@@ -68,7 +67,6 @@ var CLICK_EDIT_CONTENT = '点击修改内容';
    <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['session_secret'];?></span></td>
    <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['sort'];?></span></td>
   <td ><span class="pointer" module="AlbumCategory" href="javascript:;" onclick="toggleStatus(this,'<?php echo $val['uid'];?>','status')"><img status="1" src="/public/images/status-<?php echo $val['flag'];?>.gif" /></span></td>
-  <td ><span class="pointer" module="AlbumCategory" href="javascript:;" onclick="numberEdit(this,'<?php echo $val['uid'];?>','sort')"><?php echo $val['sort'];?></span></td>
   <td><a href="javascript:;" onclick="editData(this,'<?php echo $val['uid'];?>','id')">编辑</a>&nbsp;&nbsp;<a href="javascript:;" onclick="removeData(this,'<?php echo $val['uid'];?>','id')">删除</a>&nbsp;&nbsp;</td></tr>
 <?php }?>
   </tbody>
