@@ -5,7 +5,7 @@ class Admin extends Adm_webbase {
 
      public function __construct(){
 	    parent::__construct();
-		$this->load->model('imgsmodel');
+		
 	 }
 	/**
 	 * 

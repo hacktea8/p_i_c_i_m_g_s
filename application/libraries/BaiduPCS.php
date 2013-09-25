@@ -6,18 +6,18 @@
  * @author   duanzhenxing(duanzhenxing@baidu.com)
  * @version  2.1.0
  */
-require_once dirname ( __FILE__ ) . '/' . 'RequestCore.php';
+require_once dirname ( __FILE__ ) . '/' . 'Requestcore.php';
 
 /**
  * @desc BaiduPCS类
  */
-class BaiduPCS {
+class Baidupcs {
 
 	/**
 	 * 百度PCS RESTFUL API SERVER调用地址前缀
 	 * @var array
 	 */
-	private $_pcs_uri_prefixs = array ('https' => 'https://pcs.baidu.com/rest/2.0/pcs/' );
+	private $_pcs_uri_prefixs = array ('https' => 'https://c.pcs.baidu.com/rest/2.0/pcs/' );
 
 	private $_accessToken = '';
 

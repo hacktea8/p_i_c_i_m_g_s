@@ -11,6 +11,7 @@ class Webbase extends CI_Controller {
 		parent::__construct();
 		$this->load->helper('url');
 		$this->load->library('session');
+		$this->load->model('imgsmodel');
 	    $this->userInfo=$this->session->userdata('userInfo');
         $this->setviewData(array('seo_title'=>'','seo_keywords'=>'','seo_description'=>'','base_url'=>$this->config->item('base_url'),'domain_name'=>'',
 			'site_name'=>'图享网'));

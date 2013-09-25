@@ -6,6 +6,100 @@ class Imgsmodel extends CI_Model {
       parent::__construct();
 	 // 
    }
+   function getImgTable($pid=0,$type='admin'){
+	   $table='imgs';
+       if($type){
+	      return $table;
+	   }
+	   return $table.($pid%10);
+   }
+   function getImgId($hash){
+       $sql=sprintf("SELECT `id`, `hash` FROM `imgmap` WHERE `hash`=%s'' LIMIT 1",mysql_real_escape_string($hash));
+       $query=$this->db->query($sql);
+       return $query->row_array();
+
+   }
+   function setImgMapInfo($hash){
+       $row=$this->getImgId($hash);
+	   if($row){
+		  $row['flag']=1;
+	      return $row;
+	   }
+	   $sql=sprintf("INSERT INTO `imgmap`(`hash`) VALUES ('%s')",$hash);
+	   $this->db->query($sql);
+       $row=$this->getImgId($hash);
+	   if($row){
+	      $row['flag']=0;
+		  return $row;
+	   }
+	   return false;
+   }
+   function getAppToken($limit='',$flag=1){
+       $limit=$limit?" LIMIT {$limit} ":'';
+	   $sql=sprintf("SELECT * FROM `appdisk` ORDER BY `sort` WHERE `flag`=%d %s",$flag,$limit);
+	   $query=$this->db->query($sql);
+       if($limit==1){
+	      return $this->db->row_array($query);
+	   }
+	   return $this->db->result_array($query);
+   }
+   function getimginfoById($id='',$table='imgs'){
+       if(!$id){
+	      return false;
+	   }
+	   $sql=sprintf("SELECT * FROM %s WHERE `id`=%d LIMIT 1",$table,$id);
+       $query=$this->db->query($sql);
+       return $query->row_array();   
+   }
+   function updateimginfoByData($data='',$type=''){
+       if(!$data){
+	      return false;
+	   }
+       if(isset($data['id'])){
+	     $cid=intval($data['id']);
+		 unset($data['id']);
+		 $tname=$this->getImgTable($info['id'],$type);
+	     $this->db->update($tname, $data, array('id' => $id));
+		 return true;
+	  }
+       return false;
+   }
+   function setimginfoByInfo($data,$type=''){
+	   $info=$this->getImgId($data['hash']);
+	   if(!$info){
+	      return false;
+	   }
+	   if($info['flag']==1){
+	      return $info;
+	   }
+
+       $tname=$this->getImgTable($info['id'],$type);
+	   $tuid=$this->getAppToken(1,8);
+	   if(!$tuid){
+	      return false;
+	   }
+	   $datainfo=array();
+	   $datainfo['id']=$info['id'];
+	   $datainfo['uid']=$data['uid'];
+	   $datainfo['tuid']=$tuid['uid'];
+	   $datainfo['abmid']=$data['abmid'];
+	   $datainfo['title']=$data['title'];
+	   $datainfo['intro']=$data['intro'];
+	   $datainfo['size']=$data['size'];
+	   $datainfo['pic']='';
+	   $datainfo['ext']=$data['ext'];
+	   $datainfo['md5']=$data['md5'];
+	   $datainfo['atime']=time();
+	   $datainfo['public']=$data['public'];
+	   $datainfo['flag']=$data['flag'];
+       $this->db->insert($tname, $datainfo); 
+       $row=$this->getimginfoById($info['id']);
+	   if(isset($row['id'])){
+	      return $row['id'];
+	   }
+	   return false;
+   }
+
    function updateCate($data=''){
       if(!$data){
 	     return false;
