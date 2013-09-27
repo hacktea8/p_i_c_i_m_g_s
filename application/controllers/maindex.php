@@ -18,7 +18,6 @@ class Maindex extends Webbase {
 		   return false;
 		}
 		if($mod==1){
-
 		   $this->load->view('loginui',$this->viewData);
 		}else{
 		   $this->loginout($mod);
@@ -66,7 +65,7 @@ class Maindex extends Webbase {
 		$path=$info[2];
 		$path=$this->imgpath.$path;
 	    $access_tokeninfo=$this->imgsmodel->getAppTokenByUid($uid);
-        $this->getimgdata($access_tokeninfo['access_tokenin'],$path)
+        $this->getimgdata($access_tokeninfo['access_tokenin'],$path);
 	}
 	protected function getimgdata($access_tokenin,$path){
 	   

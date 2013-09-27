@@ -1,5 +1,4 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 class Webbase extends CI_Controller {
      public $viewData=array();
      protected $userInfo=array();
