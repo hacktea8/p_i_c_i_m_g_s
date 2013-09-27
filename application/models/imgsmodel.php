@@ -217,9 +217,9 @@ class Imgsmodel extends CI_Model {
    function getAppDiskToken($uid=''){
 	   $where=' ORDER BY sort ';
        if($uid){
-	      $where=sprintf(' AND `uid`=%d LIMIT 1 ',$uid);
+	      $where=sprintf(' WHERE `uid`=%d LIMIT 1 ',$uid);
 	   }
-	   $sql='SELECT * FROM `appdisk` WHERE `flag`=1 '.$where;
+	   $sql='SELECT * FROM `appdisk` '.$where;
 	   $query=$this->db->query($sql);
        if($uid){
 	      return $query->row_array();

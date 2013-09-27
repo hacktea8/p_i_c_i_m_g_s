@@ -2,7 +2,8 @@
 require('webbase.php');
 
 class Maindex extends Webbase {
-     
+     protected $imgpath='';
+
 	 //protected
 
 
@@ -44,7 +45,7 @@ class Maindex extends Webbase {
 	   if(!$pid){
 	      redirect('/');
 	   }
-       $info=$this->imgsmodel->getimginfoByid($row);
+       $info=$this->imgsmodel->getimginfoByid($pid);
 	   if(!$info){
 	      redirect('/');
 	   }
@@ -52,5 +53,42 @@ class Maindex extends Webbase {
 	    'info'=>$info   
 	   ));
        $this->load->view('linksrvui',$this->viewData);
+	}
+
+    /*
+	key=uid_title-ext;
+	*/
+	public function showimg($key){
+		 //check code 
+
+        $info=explode('_',$key);
+		$uid=$info[0];
+		$path=$info[2];
+		$path=$this->imgpath.$path;
+	    $access_tokeninfo=$this->imgsmodel->getAppTokenByUid($uid);
+        $this->getimgdata($access_tokeninfo['access_tokenin'],$path)
+	}
+	protected function getimgdata($access_tokenin,$path){
+	   
+	   $this->load->library('baidupcs',$access_token);
+	  
+	   $data=$this->baidupcs->download($path);
+       $imgdata['data']=&$data;
+	   $imgdata['type']=&$type;
+	   $this->img($imgdata);
+	}
+	protected function img(&$imgdata){
+	   if(!$imgdata){
+	      return false;
+	   }
+	  
+       
+	   $this->load->library('imglib');
+	   $this->imglib->config=array(
+		   'imgdata'=>$imgdata['data'],
+		   'imgtype'=>$imgdata['type']);
+	   $this->imglib->init();
+	   $this->imglib->showimg();
+	   unset($imgdata);
 	}
 }

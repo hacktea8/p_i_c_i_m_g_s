@@ -88,6 +88,15 @@ class Admin extends Adm_webbase {
 		}
 	    $this->load->view('yundisk_config',$this->viewData);
 	}
+	public function yundisk_detail($uid=0){
+        $row=$this->input->post('row');
+		if($row){
+		  $this->imgsmodel->setAppDiskToken($row);
+		}
+        $info=$this->imgsmodel->getAppDiskToken($uid);
+        $this->viewData['info']=$info;
+	    $this->load->view('yundisk_detail',$this->viewData);
+	}
     public function yundisk_add(){
 	    //require('baidupan.inc.php');
         $this->load->library('baidupcstoken');

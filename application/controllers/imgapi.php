@@ -2,6 +2,7 @@
 
 class Imgapi extends CI_Controller {
     public $targetPath='/apps/adminalbum/';
+	public $allowext=array('.gif','.jpg','.jpeg','.png');
 	/**
      * $datainfo['id']=$info['id'];
 	   $datainfo['uid']=$data['uid'];
@@ -33,7 +34,9 @@ class Imgapi extends CI_Controller {
 		$imginfo['public']=0;
 		$imginfo['ext']=$this->getextname($imginfo['title']);
 		$imginfo['size']=0;
-
+        if(!in_array($imginfo['ext'],$this->allowext)){
+		   return false;
+		}
         $key=$this->imgsmodel->setimginfoByInfo($imginfo,'admin');
         if($key){
 			$id=$key;
@@ -49,8 +52,15 @@ class Imgapi extends CI_Controller {
 				$data['pic']=$res['path'];
 			    $this->imgsmodel->updateimginfoByData($res,'admin');
 			}
-           return $key;
+           return $access_tokeninfo['uid'].'_'.$key.$imginfo['ext'];
 		}
 		return false;
+	}
+	protected function getextname($fname=''){
+	    if(!$fname){
+		   return false;
+		}
+		$extend =explode("." , $file_name);
+        return '.'.strtolower(end($extend)); 
 	}
 }
