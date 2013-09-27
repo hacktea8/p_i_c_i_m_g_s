@@ -210,6 +210,7 @@ class Imgsmodel extends CI_Model {
 	     $uid=$data['uid'];
 		 unset($data['uid']);
          $this->db->update('appdisk', $data, array('uid' => $uid));
+         return $uid;
 	  }else{
 	     $this->db->insert('appdisk', $data); 
 	  }
@@ -217,7 +218,7 @@ class Imgsmodel extends CI_Model {
    function getAppDiskToken($uid=''){
 	   $where=' ORDER BY sort ';
        if($uid){
-	      $where=sprintf(' WHERE `uid`=%d LIMIT 1 ',$uid);
+	      $where=sprintf(' WHERE `uid`=%s LIMIT 1 ',mysql_real_escape_string($uid));
 	   }
 	   $sql='SELECT * FROM `appdisk` '.$where;
 	   $query=$this->db->query($sql);

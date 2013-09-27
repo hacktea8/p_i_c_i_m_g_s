@@ -69,7 +69,7 @@ var CLICK_EDIT_CONTENT = '点击修改内容';
 		<th>session_secret</th>
 		<td>
 			<textarea name="row[session_secret]" class="textinput areainput" rows="3"><?php if(isset($info))echo $info['session_secret'];?></textarea>
-			<?php if(isset($info['uid'])){?> <input type="hidden" name="row['uid']" value="<?php echo $info['uid'];?>" /> <?php } ?>
+			<?php if(isset($info['uid'])){?> <input type="hidden" name="row[uid]" value="<?php echo $info['uid'];?>" /> <?php } ?>
 		</td>
 	</tr>
 	<tr>
@@ -78,7 +78,7 @@ var CLICK_EDIT_CONTENT = '点击修改内容';
 	</tr>
 	<tr>
 		<th width="150">flag(admin:8)</th>
-		<td><input type="text" class="textinput requireinput" name="row[sort]" value="<?php if(isset($info))echo $info['flag'];?>" /></td>
+		<td><input type="text" class="textinput requireinput" name="row[flag]" value="<?php if(isset($info))echo $info['flag'];?>" /></td>
 	</tr>
 	<tr class="act">
 		<th>&nbsp;</th>

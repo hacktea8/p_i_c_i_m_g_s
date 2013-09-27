@@ -66,7 +66,7 @@ var CLICK_EDIT_CONTENT = '点击修改内容';
    <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['session_key'];?></span></td>
    <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['session_secret'];?></span></td>
    <td ><span class="pointer" module="AlbumCategory" href="javascript:;" ><?php echo $val['sort'];?></span></td>
-  <td ><span class="pointer" module="AlbumCategory" href="javascript:;" onclick="toggleStatus(this,'<?php echo $val['uid'];?>','status')"><img status="1" src="/public/images/status-<?php echo $val['flag'];?>.gif" /></span></td>
+  <td ><span class="pointer" module="AlbumCategory" href="javascript:;" onclick="toggleStatus(this,'<?php echo $val['uid'];?>','status')"><img status="<?php echo $val['flag'];?>" title="<?php echo $val['flag'];?>" alt="<?php echo $val['flag'];?>" src="/public/images/status-<?php echo $val['flag'];?>.gif" /></span></td>
   <td><a href="/admin/yundisk_detail/<?php echo $val['uid'];?>">编辑</a>&nbsp;&nbsp;<a href="javascript:;" onclick="">删除</a>&nbsp;&nbsp;</td></tr>
 <?php }?>
   </tbody>
