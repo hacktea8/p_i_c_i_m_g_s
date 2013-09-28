@@ -14,7 +14,7 @@ class Imgsmodel extends CI_Model {
 	   return $table.($pid%10);
    }
    function getImgId($hash){
-       $sql=sprintf("SELECT `id`, `hash` FROM `imgmap` WHERE `hash`=%s'' LIMIT 1",mysql_real_escape_string($hash));
+       $sql=sprintf("SELECT `id`, `hash` FROM `imgmap` WHERE `hash`='%s' LIMIT 1",mysql_real_escape_string($hash));
        $query=$this->db->query($sql);
        return $query->row_array();
 
@@ -35,13 +35,13 @@ class Imgsmodel extends CI_Model {
 	   return false;
    }
    function getAppToken($limit='',$flag=1){
-       $limit=$limit?" LIMIT {$limit} ":'';
-	   $sql=sprintf("SELECT * FROM `appdisk` ORDER BY `sort` WHERE `flag`=%d %s",$flag,$limit);
+       $limits=$limit?" LIMIT {$limit} ":'';
+	   $sql=sprintf("SELECT * FROM `appdisk` WHERE `flag`=%d ORDER BY `sort` %s",$flag,$limits);
 	   $query=$this->db->query($sql);
        if($limit==1){
-	      return $this->db->row_array($query);
+	      return $query->row_array();
 	   }
-	   return $this->db->result_array($query);
+	   return $query->result_array();
    }
    function getimginfoById($id='',$table='imgs'){
        if(!$id){
@@ -52,30 +52,32 @@ class Imgsmodel extends CI_Model {
        return $query->row_array();   
    }
    function updateimginfoByData($data='',$type=''){
+//var_dump($data);exit;
        if(!$data){
 	      return false;
 	   }
        if(isset($data['id'])){
-	     $cid=intval($data['id']);
+	     $id=intval($data['id']);
 		 unset($data['id']);
-		 $tname=$this->getImgTable($info['id'],$type);
+		 $tname=$this->getImgTable($id,$type);
 	     $this->db->update($tname, $data, array('id' => $id));
 		 return true;
 	  }
        return false;
    }
    function setimginfoByInfo($data,$type=''){
-	   $info=$this->getImgId($data['hash']);
+	   $info=$this->setImgMapInfo($data['md5']);
 	   if(!$info){
 	      return false;
 	   }
 	   if($info['flag']==1){
-	      return $info;
+	      return $info['id'];
 	   }
 
        $tname=$this->getImgTable($info['id'],$type);
 	   $tuid=$this->getAppToken(1,8);
-	   if(!$tuid){
+//var_dump($tuid);exit;
+	   if(!isset($tuid['uid'])){
 	      return false;
 	   }
 	   $datainfo=array();

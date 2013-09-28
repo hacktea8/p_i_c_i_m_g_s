@@ -25,7 +25,7 @@ class Baidupcs {
 	 * 初始化accessToken
 	 * @param string $accessToken
 	 */
-	public function __construct($accessToken) {
+	public function __construct($accessToken='') {
 		$this->_accessToken = $accessToken;
 	}
 
@@ -104,7 +104,7 @@ class Baidupcs {
 	 */
 	public function upload($fileContent, $targetPath, $fileName, $newFileName = null, $isCreateSuperFile = FALSE) {
 		$boundary = md5 ( time () );
-		$postContent .= "--" . $boundary . "\r\n";
+		$postContent = "--" . $boundary . "\r\n";
 		$postContent .= "Content-Disposition: form-data; name=\"file\"; filename=\"{$fileName}\"\r\n";
 		$postContent .= "Content-Type: application/octet-stream\r\n\r\n";
 		$postContent .= $fileContent . "\r\n";

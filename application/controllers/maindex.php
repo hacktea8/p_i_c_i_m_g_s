@@ -29,7 +29,7 @@ class Maindex extends Webbase {
 	public function uploads(){
 	    $row=$this->input->post('imginfo');
 		if($row){
-		   //校验 安全码
+                // check code
 		   if(true){
 		      $pid=$this->imgsmodel->uploadimgs($row);
 			  if($pid){
@@ -54,26 +54,40 @@ class Maindex extends Webbase {
        $this->load->view('linksrvui',$this->viewData);
 	}
 
+        public function showpic($key=''){
+                 if(!$key){
+                   return false;
+                 }
+//echo 444;exit;
+                 $this->imgpath='/apps/picimgs/adminalbum/';
+                 $this->showimg($key);
+        }
     /*
 	key=uid_title-ext;
 	*/
-	public function showimg($key){
+	public function showimg($key=''){
+                if(!$key){
+                  return false;
+                }
 		 //check code 
 
         $info=explode('_',$key);
+//var_dump($key);exit;
 		$uid=$info[0];
-		$path=$info[2];
+		$path=$info[1];
 		$path=$this->imgpath.$path;
-	    $access_tokeninfo=$this->imgsmodel->getAppTokenByUid($uid);
-        $this->getimgdata($access_tokeninfo['access_tokenin'],$path);
+	    $access_tokeninfo=$this->imgsmodel->getAppDiskToken($uid);
+//var_dump($access_tokeninfo);exit;
+        $this->getimgdata($access_tokeninfo['access_token'],$path);
 	}
-	protected function getimgdata($access_tokenin,$path){
+	protected function getimgdata($access_token,$path){
 	   
-	   $this->load->library('baidupcs',$access_token);
-	  
+	   $this->load->library('baidupcs');
+	   $this->baidupcs->setAccessToken($access_token);  
 	   $data=$this->baidupcs->download($path);
-       $imgdata['data']=&$data;
-	   $imgdata['type']=&$type;
+//var_dump($data);exit;
+       $imgdata['data']=$data;
+	   $imgdata['type']=$this->getextname($path);
 	   $this->img($imgdata);
 	}
 	protected function img(&$imgdata){
@@ -81,12 +95,14 @@ class Maindex extends Webbase {
 	      return false;
 	   }
 	  
+//var_dump($imgdata);exit;
        
 	   $this->load->library('imglib');
 	   $this->imglib->config=array(
 		   'imgdata'=>$imgdata['data'],
 		   'imgtype'=>$imgdata['type']);
 	   $this->imglib->init();
+var_dump($this->imglib);exit;
 	   $this->imglib->showimg();
 	   unset($imgdata);
 	}

@@ -137,4 +137,12 @@ class Webbase extends CI_Controller {
 	 curl_close($ch) ;   
 	 return $html;
   }
+  
+  protected function getextname($fname=''){
+         if(!$fname){
+            return false;
+          }
+          $extend =explode('.' , $fname);
+          return strtolower(end($extend));
+        }
 }
