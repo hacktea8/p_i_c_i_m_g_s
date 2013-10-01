@@ -59,7 +59,7 @@ class Imgapi extends CI_Controller {
 			$access_tokeninfo=$this->imgsmodel->getAppToken(1,8);
 //var_dump($check);exit;
                         if(isset($check['flag'])&&$check['flag']==1){
-                           die(json_encode($access_tokeninfo['uid'].'_'.$key.$imginfo['ext']));
+                           die(($access_tokeninfo['uid'].'_'.$key.$imginfo['ext']));
                         }
 //var_dump($access_tokeninfo);exit;
 			$this->load->library('baidupcs');
@@ -79,7 +79,7 @@ class Imgapi extends CI_Controller {
 				$data['pic']=$res['path'];
 			    $this->imgsmodel->updateimginfoByData($data,'admin');
 //var_dump($res);exit;
-           die(json_encode($access_tokeninfo['uid'].'_'.$key.$imginfo['ext']));
+           die(($access_tokeninfo['uid'].'_'.$key.$imginfo['ext']));
 			}
 		}
 //var_dump($res);exit;

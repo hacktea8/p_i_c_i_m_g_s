@@ -98,11 +98,12 @@ class Maindex extends Webbase {
 //var_dump($imgdata);exit;
        
 	   $this->load->library('imglib');
+//var_dump($this->imglib->checksupport());exit;
 	   $this->imglib->config=array(
 		   'imgdata'=>$imgdata['data'],
 		   'imgtype'=>$imgdata['type']);
 	   $this->imglib->init();
-var_dump($this->imglib);exit;
+//var_dump($this->imglib);exit;
 	   $this->imglib->showimg();
 	   unset($imgdata);
 	}
