@@ -8,7 +8,7 @@ class Imgsmodel extends CI_Model {
    }
    function getImgTable($pid=0,$type='admin'){
 	   $table='imgs';
-       if($type){
+       if('admin' == $type){
 	      return $table;
 	   }
 	   return $table.($pid%10);
@@ -43,10 +43,11 @@ class Imgsmodel extends CI_Model {
 	   }
 	   return $query->result_array();
    }
-   function getimginfoById($id='',$table='imgs'){
+   function getimginfoById($id='',$type='admin'){
        if(!$id){
 	      return false;
 	   }
+           $table = $this->getImgTable($id,$type);
 	   $sql=sprintf("SELECT * FROM %s WHERE `id`=%d LIMIT 1",$table,$id);
        $query=$this->db->query($sql);
        return $query->row_array();   

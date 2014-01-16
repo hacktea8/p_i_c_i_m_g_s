@@ -18,6 +18,7 @@ class Baidupcs {
 	 * @var array
 	 */
 	private $_pcs_uri_prefixs = array ('https' => 'https://c.pcs.baidu.com/rest/2.0/pcs/' );
+	//private $_pcs_uri_prefixs = array ('https' => 'https://openapi.baidu.com/oauth/2.0/' );
 
 	private $_accessToken = '';
 
@@ -82,6 +83,21 @@ class Baidupcs {
 
 		return $result;
 	}
+
+	/**
+	 * 获取当前用户Token
+	 * @return array
+	 */
+        public function refreshToken($data = array()){
+                $result = $this->_baseControl('token?grant_type=refresh_token&refresh_token= '.$data['refresh_token'].'&client_id= '.$data['client_id'].'&client_secret= '.$data['client_secret'], array());
+                   var_dump($data);
+                $result = json_decode($result, 1);
+                if(isset($result['error'])){
+                   var_dump($result);
+                   return false;
+                }
+                return $result;
+        }
 
 	/**
 	 * 获取当前用户空间配额信息

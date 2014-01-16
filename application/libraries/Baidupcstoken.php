@@ -19,6 +19,7 @@ class Baidupcstoken{
   function init($config){
       isset($config['apikey']) &&$this->client_id=$config['apikey'];
       isset($config['secretkey']) &&$this->client_secret=$config['secretkey'];
+      isset($config['refresh_token']) &&$this->refresh_token=$config['refresh_token'];
   }
   function setTokenValue($access_token,$refresh_token,$session_key,$session_secret){
      $info="<?php\r\n";
@@ -89,6 +90,7 @@ class Baidupcstoken{
      );
      $html=$this->getHtml($param);
      $html=json_decode($html,1);
+     return $html;
      if(isset($html['access_token'])){
 	$this->access_token=$html['access_token'];
         return $html;//return $this->setTokenValue($html['access_token'],$html["refresh_token"],

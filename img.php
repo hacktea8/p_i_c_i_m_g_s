@@ -160,7 +160,10 @@ class Imgsmodel{
     $this->db=new DB_MYSQL();
   }
   public function getAppDiskToken($uid){
-    $where=sprintf(' WHERE `uid`=%s LIMIT 1 ',mysql_real_escape_string($uid));
+    if(substr($uid,0,1) < 1)
+       return false;
+
+    $where=sprintf(' WHERE `uid`=\'%s\' LIMIT 1 ',mysql_real_escape_string($uid));
     $sql='SELECT * FROM `appdisk` '.$where;
     return $this->db->row_array($sql);
   }
@@ -181,6 +184,9 @@ $path=$info[1];
 $path=$imgpath.$path;
 $imgsmodel=new Imgsmodel();
 $access_tokeninfo=$imgsmodel->getAppDiskToken($uid);
+if(!isset($access_tokeninfo['access_token'])){
+   return false;
+}
 //var_dump($access_tokeninfo);exit;
 $baidupcs=new Baidupcs();
 $baidupcs->setAccessToken($access_tokeninfo['access_token']);
