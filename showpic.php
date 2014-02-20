@@ -1,7 +1,7 @@
 <?php
 $key=isset($_GET['key'])?trim($_GET['key']):'';
 if(!$key){
-   exit();
+   $key = '3958009_0000671092.jpg';
 }
 define('SHOW_IMG',1);
 $root=dirname(__FILE__);

@@ -216,7 +216,7 @@ class Imgapi extends CI_Controller {
 		$seqcode=$this->input->get('seq');
 		$seq='';
 		if($seqcode!=$seq){
-                  die(json_encode(0));
+                  die(json_encode('error code!'));
 		}
 		   
 		$imginfo=$this->input->post('imginfo');
@@ -267,7 +267,7 @@ class Imgapi extends CI_Controller {
 			$id=$key;
 			$key=sprintf('%010d',$key);
 //var_dump($key);exit;
-			$access_tokeninfo=$this->imgsmodel->getAppToken(1,6);
+			$access_tokeninfo=$this->imgsmodel->getAppToken(1,8);
 //var_dump($check);exit;
                         if(isset($check['flag'])&&$check['flag']==1){
                            @unlink($upload_name);
@@ -305,7 +305,7 @@ class Imgapi extends CI_Controller {
 		}
                 @unlink($upload_name);
 //var_dump($res);exit;
-		die(json_encode(0));
+		die(json_encode('upload failed!'));
 	}
 	protected function getextname($fname=''){
 	    if(!$fname){
