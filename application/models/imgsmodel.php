@@ -1,8 +1,8 @@
 <?php
-class Imgsmodel extends CI_Model {
+require_once 'basemodel.php';
+class Imgsmodel extends baseModel {
    
    function __construct(){
-	  //$this->load->database('default',true);
       parent::__construct();
 	 // 
    }

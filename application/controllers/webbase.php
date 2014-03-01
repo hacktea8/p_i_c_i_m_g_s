@@ -1,94 +1,60 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Webbase extends CI_Controller {
-     public $viewData=array();
-     protected $userInfo=array();
-     public $adminList=array(3);
-     protected $isadmin=0;
-     public $loginurl='http://bbs.hacktea8.com/pw_userapi.php';
+     public $viewData = array();
+     protected $userInfo = array();
+     public $adminList = array(1);
+     protected $isadmin = 0;
 
      public function __construct(){
-		parent::__construct();
-		$this->load->helper('url');
-		$this->load->library('session');
-		$this->load->model('imgsmodel');
-	    $this->userInfo=$this->session->userdata('userInfo');
+	parent::__construct();
+	$this->load->model('imgsmodel');
+	$this->load->model('usermodel');
+        $this->userInfo = $this->session->userdata('user_logindata');
+        if(empty($userInfo)){
+           //解析UID
+           $uinfo = getSynuserUid();
+           if($uinfo){
+             $this->userInfo['uname'] = $uinfo['uname'];
+             $uinfo = getSynuserInfo($uinfo['uid']);
+             $uinfo['uname'] = $this->userInfo['uname'];
+             $uinfo = $this->usermodel->getUserInfo($uinfo);
+             if($uinfo){
+               $this->userInfo = array_merge($this->userInfo,$uinfo);
+               $this->userInfo['isadmin'] = $this->checkIsadmin($return = 1);
+               $this->session->set_userdata(array('user_logindata'=>$this->userInfo));
+             }
+          }
+        }else{
+          $this->userInfo = $userInfo;
+        }
+//var_dump($this->userInfo);exit;
         $this->setviewData(array('seo_title'=>'','seo_keywords'=>'','seo_description'=>'','base_url'=>$this->config->item('base_url'),'domain_name'=>'',
-			'site_name'=>'图享网'));
-                $this->loginurl=$this->config->item('loginurl');
-	 }
+	'site_name'=>'图享网'));
+        $this->loginurl = $this->config->item('loginurl');
+        
+     }
      public function checkLogin(){
-	    if(isset($this->userInfo['uid']) &&$this->userInfo['uid']>0){
-			return true;
-		}else{
-		   return false;
-		}
-	 }
-	 public function checkIsadmin(){
-	    if(!$this->checkLogin()){
-			redirect('/maindex/userlogin/1');
-		}
-		if(in_array($this->userInfo['groupid'],$this->adminList)){
-		   return true;
-		}
-		foreach($this->userInfo['group'] as $gid){
-		   if(in_array($gid,$this->adminList)){
-		      return true;
-		   }
-		}
+	 if(isset($this->userInfo['uid']) &&$this->userInfo['uid']>0){
+	   return true;
+	 }else{
+	   return false;
+	 } 
+     }
+     public function checkIsadmin(){
+         if(!$this->checkLogin()){
+           redirect('/maindex/');
+	  }
+	  if(in_array($this->userInfo['groupid'],$this->adminList)){
+	    return true;
+	  }
+	  foreach($this->userInfo['group'] as $gid){
+	    if(in_array($gid,$this->adminList)){
+	      return true;
+	    }
+	  }
 		return false;
-	 }
-	 public function loginout($mod=1){
-	    if($mod==2){
-		   $row=$this->input->post('row');
-		   if(empty($row)){
-		       redirect('/maindex/userlogin/1');
-		   }
-		   //var_dump($row);exit;
-		   $seq=substr($this->getSecode(),0,16);
-		   //echo $seq;'<br />';
-		   $row['logintype']=0;
-		   $param=array(
-		   'url'=>$this->loginurl,
-		   'uname'=>trim($row['email_name']), 
-		   'upwd'=>md5(trim($row['pass'])),
-		   'logintype'=>$row['logintype'],
-		   'seq'=>$seq,
-		   'action'=>'login'
-		   );
-           $html=$this->getHtml($param);
-		   //var_dump($html);exit;
-		   $html=json_decode($html,1);
-		   $oseq=substr($html['seq'],0,16);
-                   $code=$this->config->item('login_recv_sec_key');
-		   $seq=substr($this->getSecode($code),0,16);
-
-		   if($oseq==$seq){
-			   unset($html['seq']);
-			   unset($html['safecv']);
-			   unset($html['synlogin']);
-			   $html['groups']=trim($html['groups'],',');
-			   if(empty($html['groups'])){
-			      $html['groups']=array();
-			   }else{
-			      $html['groups']=explode(',',$html['groups']);
-			   }
-			  // var_dump($row);exit;
-		      $this->session->set_userdata(array('userInfo'=>$html));
-              $info=$this->session->userdata('userInfo');
-			  // var_dump($info);exit;
-			  //DB
-			  redirect('/');
-		   }else{
-			   //echo $oseq.'='.$seq;
-			   redirect('/maindex/userlogin/1');
-		      //return false;
-		   }
-		}else{
-		   // Login Out
-		   $this->session->unset_userdata('userInfo');
-		   redirect('/');
-		}
-	 }
+      }
+         
 	/**
 	 * 
 	 */

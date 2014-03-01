@@ -151,7 +151,7 @@ class usercontrol extends base {
 
 	function onget_user() {
 		$this->init_input();
-		$username = $this->input('username');
+		$username = $this->input('uid');
 		if(!$this->input('isuid')) {
 			$status = $_ENV['user']->get_user_by_username($username);
 		} else {

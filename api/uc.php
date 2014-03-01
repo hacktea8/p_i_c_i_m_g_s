@@ -6,8 +6,8 @@
  *
  *      $Id: uc.php 34214 2013-11-11 02:33:40Z hypowang $
  */
-
-error_reporting(0);
+ini_set('display_errors',1);
+error_reporting(E_ALL);
 
 define('UC_CLIENT_VERSION', '1.6.0');
 define('UC_CLIENT_RELEASE', '20110501');
@@ -34,15 +34,17 @@ define('API_RETURN_FORBIDDEN', '1');
 define('IN_API', true);
 define('CURSCRIPT', 'api');
 
+defined('DISCUZ_ROOT') || define('DISCUZ_ROOT', dirname(__FILE__).'/../');
 
 if(!defined('IN_UC')) {
-	require_once '../source/class/class_core.php';
 
-	$discuz = C::app();
-	$discuz->init();
-
-	require DISCUZ_ROOT.'./config/config_ucenter.php';
-
+	require DISCUZ_ROOT.'config_ucenter.php';
+	include_once DISCUZ_ROOT.'./uc_client/client.php';
+        if( !function_exists('authcode')){
+           function authcode($string, $operation = 'DECODE', $key = '', $expiry = 0) {
+             return uc_authcode($string, $operation, $key, $expiry);
+          }
+        }
 	$get = $post = array();
 
 	$code = @$_GET['code'];
@@ -54,7 +56,6 @@ if(!defined('IN_UC')) {
 	if(empty($get)) {
 		exit('Invalid Request');
 	}
-
 	include_once DISCUZ_ROOT.'./uc_client/lib/xml.class.php';
 	$post = xml_unserialize(file_get_contents('php://input'));
 
@@ -67,6 +68,28 @@ if(!defined('IN_UC')) {
 	}
 } else {
 	exit;
+}
+
+function dsetcookie($var, $value = '', $life = 0, $prefix = 'hk8_', $httponly = false) {
+
+	global $_G;
+	$_G['cookie'][$var] = $value;
+	$var = ($prefix ? $prefix : '').$var;
+	$_COOKIE[$var] = $value;
+
+	if($value == '' || $life < 0) {
+		$value = '';
+		$life = -1;
+	}
+
+	if(defined('IN_MOBILE')) {
+		$httponly = false;
+	}
+
+	$life = $life > 0 ? time() + $life : ($life < 0 ? time() - 31536000 : 0);
+
+	$secure = $_SERVER['SERVER_PORT'] == 443 ? 1 : 0;
+        setcookie($var, $value, $life, '/', '', $secure);
 }
 
 class uc_note {
@@ -92,17 +115,6 @@ class uc_note {
 	}
 
 	function deleteuser($get, $post) {
-		global $_G;
-		if(!API_DELETEUSER) {
-			return API_RETURN_FORBIDDEN;
-		}
-		$uids = str_replace("'", '', stripslashes($get['ids']));
-		$ids = array();
-		$ids = array_keys(C::t('common_member')->fetch_all($uids));
-		require_once DISCUZ_ROOT.'./source/function/function_delete.php';
-		$ids && deletemember($ids);
-
-		return API_RETURN_SUCCEED;
 	}
 
 	function renameuser($get, $post) {
@@ -188,8 +200,8 @@ class uc_note {
 
 		$cookietime = 31536000;
 		$uid = intval($get['uid']);
-		if(($member = getuserbyuid($uid, 1))) {
-			dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
+		if($uid) {
+			dsetcookie('auth', authcode("$get[username]\t$get[uid]\t$get[time]", 'ENCODE'), $cookietime);
 		}
 	}
 

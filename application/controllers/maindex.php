@@ -10,19 +10,19 @@ class Maindex extends Webbase {
 	/**
 	 * 
 	 */
-	public function userlogin($mod=1)
-	{
-
-		if($this->checkLogin() &&$mod){
-		   redirect('/');
-		   return false;
-		}
-		if($mod==1){
-		   $this->load->view('loginui',$this->viewData);
-		}else{
-		   $this->loginout($mod);
-		}
-	}
+    public function login(){
+//var_dump($_SERVER);exit;
+    $url = $this->viewData['login_url'].urlencode($_SERVER['HTTP_REFERER']);
+//echo $url;exit;
+    redirect($url);
+  }
+  public function loginout(){
+    $this->session->unset_userdata('user_logindata');
+    setcookie('hk8_auth','',time()-3600,'/');
+    $url = $_SERVER['HTTP_REFERER'];
+//echo $url;exit;
+    redirect($url);
+  }
 	public function getuser(){
 		var_dump($this->userInfo);
 	}

@@ -334,6 +334,11 @@ function uc_user_edit($username, $oldpw, $newpw, $email, $ignoreoldpw = 0, $ques
 	return call_user_func(UC_API_FUNC, 'user', 'edit', array('username'=>$username, 'oldpw'=>$oldpw, 'newpw'=>$newpw, 'email'=>$email, 'ignoreoldpw'=>$ignoreoldpw, 'questionid'=>$questionid, 'answer'=>$answer));
 }
 
+function uc_user_info($uid) {
+	$return = call_user_func(UC_API_FUNC, 'user', 'get_userinfo', array('uid'=>$uid));
+        return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
+}
+
 function uc_user_delete($uid) {
 	return call_user_func(UC_API_FUNC, 'user', 'delete', array('uid'=>$uid));
 }
