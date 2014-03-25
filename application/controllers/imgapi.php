@@ -113,7 +113,7 @@ class Imgapi extends CI_Controller {
 		$seqcode=$this->input->get('seq');
 		$seq='';
 		if($seqcode!=$seq){
-                  die(json_encode('0'));
+                  die(json_encode('500'));
 		}
 		   
 		$imgurl = $this->input->post('imgurl');
@@ -121,7 +121,7 @@ class Imgapi extends CI_Controller {
                 $referer = $referer ? "Referer: $referer" : '';
 //var_dump($imgurl);exit;
                 if(!$imgurl){
-                   die(json_encode(0));
+                   die(json_encode('404'));
                 }
                 $imginfo = array();
                 $imginfo['title'] = basename($imgurl);
@@ -151,7 +151,7 @@ class Imgapi extends CI_Controller {
                 $imgsize = $imgsize['Content-Length'];
                 
                 if($imgsize < 1000){
-                  die(json_encode(0));
+                  die(json_encode('10'));
                 }
                 $context = stream_context_create($default_opts);
                 $imghtml = $html =  file_get_contents($imgurl, false, $context);
@@ -162,11 +162,11 @@ class Imgapi extends CI_Controller {
                 unlink($imgurl);
 //exit;//var_dump($imginfo);exit;
         if(!in_array($imginfo['ext'],$this->allowext)){
-                  die(json_encode(0));
+                  die(json_encode('20'));
 		}
         $key=$this->imgsmodel->setimginfoByInfo($imginfo,'admin');
-//var_dump($key);exit;
         if($key){
+//var_dump($key);exit;
 //判断ID是否已上传
                         $check=$this->imgsmodel->getimginfoById($key);
 			$id=$key;
@@ -197,6 +197,9 @@ class Imgapi extends CI_Controller {
                                 var_dump($res);exit;
                                 $res=json_decode($res,1);
                         }
+     if(isset($res['error_code']) && 31061 == $res['error_code']){
+       echo $access_tokeninfo['uid'].'_'.$key.$imginfo['ext'];exit;
+     }
 			if(isset($res['path'])){
 				$data=array();
 				$data['id']=$id;
@@ -209,7 +212,7 @@ class Imgapi extends CI_Controller {
 //var_dump($res);exit;
 		}
 //var_dump($res);exit;
-		die(json_encode(0));
+		die(json_encode($key));
 	}
 	public function upload()
 	{

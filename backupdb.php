@@ -1,6 +1,6 @@
 <?php
 
-$dbase = array('emuweb'/*'imgweb','comicweb','emuweb','sitetoolweb','videoweb'*/);
+$dbase = array('emuweb','imgweb','comicweb','emuweb','sitetoolweb','videoweb');
 $date = date('Y_m_d_');
 $bkp = 'cache/backup/';
 $svp = $bkp.'%s.sql.gz';
