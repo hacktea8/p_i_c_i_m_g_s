@@ -201,6 +201,7 @@ ob_start();
 ob_clean();
 $size = @strlen($data);
 header("Content-Length: $size");
+$type = $type == 'jpg'?'jpeg':$type;
 header("Content-Type: image/{$type}");
 echo $data;
 ?>

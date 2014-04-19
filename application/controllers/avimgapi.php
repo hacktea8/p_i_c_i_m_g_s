@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Imgapi extends CI_Controller {
+class Avimgapi extends CI_Controller {
     public $targetPath='/apps/picimgs/adminalbum/';
-	public $allowext=array('.gif','.jpg','.jpeg','.png');
+	public $allowext=array('.gif','.jpg','.jpeg','.png','.bmp');
 	/** flag 8=admin 6=user
          * $datainfo['id']=$info['id'];
 	   $datainfo['uid']=$data['uid'];
