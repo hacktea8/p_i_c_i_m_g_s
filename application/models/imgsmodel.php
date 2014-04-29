@@ -52,6 +52,15 @@ class Imgsmodel extends baseModel {
        $query=$this->db->query($sql);
        return $query->row_array();   
    }
+   function addfileinfoByHash($hash){
+     $this->db->insert('filemap',array('hash'=>$hash));
+     return $this->db->insert_id();
+   }
+   function getfileinfoById($id){
+     $table = '`filemap`';
+     $sql = sprintf("SELECT `id` FROM %s WHERE `hash`='%s' LIMIT 1",$table,$id);
+     return $this->db->query($sql)->row_array();
+   }
    function updateimginfoByData($data='',$type=''){
 //var_dump($data);exit;
        if(!$data){
