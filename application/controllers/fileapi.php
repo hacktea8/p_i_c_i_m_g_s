@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Fileapi extends CI_Controller {
-    public $targetPath='/apps/picimgs/adminalbum/';
-	public $allowext=array('.gif','.jpg','.jpeg','.png','.bmp','.torrent');
+    public $targetPath='/apps/picimgs/admattach/';
+	public $allowext=array('.gif','.jpg','.jpeg','.png','.bmp');
 	/** flag 8=admin 6=user
          * $datainfo['id']=$info['id'];
 	   $datainfo['uid']=$data['uid'];
@@ -147,24 +147,34 @@ class Fileapi extends CI_Controller {
   )
 );
                 $default = stream_context_get_default($default_opts);
-                
                 $context = stream_context_create($default_opts);
                 $html =  file_get_contents($imgurl, false, $context);
-                $imgurl = 'cache/images/ed2ks'.$imginfo['title'];
+                $imgurl = 'cache/images/btv'.$imginfo['title'];
                 file_put_contents($imgurl, $html);
-                chmod($imgurl, 0777);
-                $imghtml = file_get_contents($imgurl);
-                $imginfo['hash'] = md5_file($imgurl);
-                unlink($imgurl);
+         if(in_array($imginfo['ext'],$this->allowext)){
+           $imgurl_w = 'cache/images/btvw'.$imginfo['title'];
+           chmod($imgurl, 0777);
+           $cmd = "convert {$imgurl} {$imgurl}";
+           exec($cmd);
+           $water = 'public/images/water/btvwater.jpg';
+           $this->load->library('imagelib');
+           $this->imagelib->init($imgurl,3,$water,9,$imgurl_w);
+           $this->imagelib->outimage();
+           chmod($imgurl, 0777);
+           $imghtml = file_get_contents($imgurl_w);
+           unlink($imgurl_w);
+         }else{
+           chmod($imgurl, 0777);
+           $imghtml = file_get_contents($imgurl);
+         }
+         $imginfo['hash'] = md5_file($imgurl);
+         unlink($imgurl);
 //exit;//var_dump($imginfo);exit;
-        if(!in_array($imginfo['ext'],$this->allowext)){
-                  die(json_encode('20'));
-		}
         $check=$this->imgsmodel->getfileinfoById($imginfo['hash'],'admin');
         $key = isset($check['id'])?$check['id']:0;
-        if($key){
-	 $key=sprintf('%010d',$key);
-         $access_tokeninfo=$this->imgsmodel->getAppToken(1,9);
+	$key=sprintf('%010d',$key);
+        $access_tokeninfo=$this->imgsmodel->getAppToken(1,9);
+        if(isset($check['flag']) && $check['flag']){
          echo $access_tokeninfo['uid'].'_'.$key.$imginfo['ext'];exit;
         }
 	$this->load->library('baidupcs');
@@ -181,11 +191,14 @@ class Fileapi extends CI_Controller {
                                 var_dump($res);exit;
                                 $res=json_decode($res,1);
                         }
-     if(isset($res['path'])){
-       $key = $this->imgsmodel->addfileinfoByHash($imginfo['hash']);
-       $key=sprintf('%010d',$key);
+     if(isset($res['path']) || $res['error_code']==31061){
+       $this->imgsmodel->setfileinfoByHash($imginfo['hash']);
+       //$key=sprintf('%010d',$key);
        echo $access_tokeninfo['uid'].'_'.$key.$imginfo['ext'];exit;
     }
+     if(isset($res['error_code'])){
+       $key = '0';//var_dump($res);exit;
+     }
     die(json_encode($key));
   }
 	public function upload()
