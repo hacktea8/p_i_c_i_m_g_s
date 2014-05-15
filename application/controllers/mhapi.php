@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Fileapi extends CI_Controller {
-    public $targetPath='/apps/picimgs/admattach/';
-	public $allowext=array('.gif','.jpg','.jpeg','.png','.bmp');
+class Mhapi extends CI_Controller {
+    public $targetPath='/apps/picimgs/adminalbum/';
+	public $allowext=array('.gif','.jpg','.jpeg','.png');
 	/** flag 8=admin 6=user
          * $datainfo['id']=$info['id'];
 	   $datainfo['uid']=$data['uid'];
@@ -116,21 +116,18 @@ class Fileapi extends CI_Controller {
                   die(json_encode('500'));
 		}
 		   
-		$imgurl = $_POST['imgurl'];
-		$referer = $_POST['referer'];
+		$imgurl = $this->input->post('imgurl');
+		$referer = $this->input->post('referer');
                 $referer = $referer ? "Referer: $referer" : '';
-                $filename = $_POST['filename'];
-//var_dump($imgurl);exit;
                 if(!$imgurl){
                    die(json_encode('404'));
                 }
                 $imginfo = array();
-                $imginfo['title'] = $filename ? $filename : basename($imgurl);
+                $imginfo['title'] = basename($imgurl);
 		$this->load->model('imgsmodel');
-		//$this->imgsmodel->getimginfoByid($row);
 		$imginfo['flag']=4;
 		$imginfo['public']=0;
-		$imginfo['ext'] = $this->getextname($imginfo['title']);
+		$imginfo['ext']=$this->getextname($imginfo['title']);
 		$imginfo['size']=0;
 		$imginfo['uid']=2;
 		$imginfo['abmid']=0;
@@ -147,62 +144,62 @@ class Fileapi extends CI_Controller {
   )
 );
                 $default = stream_context_get_default($default_opts);
+                
                 $context = stream_context_create($default_opts);
                 $html =  file_get_contents($imgurl, false, $context);
-                $imgurl = 'cache/images/btv'.$imginfo['title'];
+                $imgurl = 'cache/images/ed2kmh'.basename($imgurl);
                 file_put_contents($imgurl, $html);
-         if(in_array($imginfo['ext'],$this->allowext)){
-           $imgurl_w = 'cache/images/btvw'.$imginfo['title'];
-           chmod($imgurl, 0777);
-           $cmd = "convert {$imgurl} {$imgurl}";
-           exec($cmd);
-           $water = 'public/images/water/btvwater.jpg';
-           $this->load->library('imagelib');
-           $this->imagelib->init($imgurl,3,$water,9,$imgurl_w);
-           $this->imagelib->outimage();
-           chmod($imgurl, 0777);
-           $imghtml = file_get_contents($imgurl_w);
-           unlink($imgurl_w);
-         }else{
-           chmod($imgurl, 0777);
-           $imghtml = file_get_contents($imgurl);
-//exit;
-         }
-         $imginfo['hash'] = md5_file($imgurl);
-         unlink($imgurl);
+                chmod($imgurl, 0777);
+                $cmd = "convert {$imgurl} {$imgurl}";
+                exec($cmd);
+                $imghtml = file_get_contents($imgurl);
+                $imginfo['md5'] = md5_file($imgurl);
+                unlink($imgurl);
 //exit;//var_dump($imginfo);exit;
-        $check=$this->imgsmodel->getfileinfoById($imginfo['hash'],'admin');
-        $key = isset($check['id'])?$check['id']:0;
-	$key=sprintf('%010d',$key);
-        $access_tokeninfo=$this->imgsmodel->getAppToken(1,9);
-        if(isset($check['flag']) && $check['flag']){
-         echo $access_tokeninfo['uid'].'_'.$key.$imginfo['ext'];exit;
-        }
-	$this->load->library('baidupcs');
-	$this->baidupcs->setAccessToken($access_tokeninfo['access_token']);
-	$res = $this->baidupcs->upload($imghtml, $this->targetPath, $key.$imginfo['ext']);
-                        $res = json_decode($res,1);
-                        if(isset($res['error_msg']) && 'Access token expired' == $res['error_msg']){
-                                die('44');
-                                $this->load->library('baidupcstoken');
-                                $appconfig=$this->config->item('baiduPcs_app');
-                                $appconfig['refresh_token'] = $access_tokeninfo['refresh_token'];
-                                $this->baidupcstoken->init($appconfig);
-                                $res=$this->baidupcstoken->getTokenByRefresh();
-                                var_dump($res);exit;
-                                $res=json_decode($res,1);
-                        }
-     if(isset($res['path']) || $res['error_code']==31061){
-       $this->imgsmodel->setfileinfoByHash($imginfo['hash']);
-       //$key=sprintf('%010d',$key);
+        if(!in_array($imginfo['ext'],$this->allowext)){
+                  die(json_encode('20'));
+		}
+        $key=$this->imgsmodel->setimginfoByInfo($imginfo,'admin');
+        if($key){
+          $check=$this->imgsmodel->getimginfoById($key);
+	  $id=$key;
+	  $key=sprintf('%010d',$key);
+	  $access_tokeninfo=$this->imgsmodel->getAppToken(1,8);
+          if(isset($check['flag'])&&$check['flag']==1){
+            echo $access_tokeninfo['uid'].'_'.$key.$imginfo['ext'];exit;
+          }
+          $this->load->library('baidupcs');
+	  $this->baidupcs->setAccessToken($access_tokeninfo['access_token']);
+	  $res = $this->baidupcs->upload($imghtml, $this->targetPath, $key.$imginfo['ext']);
+          $res = json_decode($res,1);
+          if(isset($res['error_msg']) && 'Access token expired' == $res['error_msg']){
+            die('44');
+            $this->load->library('baidupcstoken');
+            $appconfig=$this->config->item('baiduPcs_app');
+            $appconfig['refresh_token'] = $access_tokeninfo['refresh_token'];
+            $this->baidupcstoken->init($appconfig);
+            $res=$this->baidupcstoken->getTokenByRefresh();
+            var_dump($res);exit;
+            $res=json_decode($res,1);
+          }
+     if(isset($res['error_code']) && 31061 == $res['error_code']){
        echo $access_tokeninfo['uid'].'_'.$key.$imginfo['ext'];exit;
-    }
-     if(isset($res['error_code'])){
-       $key = '0';//var_dump($res);exit;
      }
+     if(isset($res['path'])){
+       $data=array();
+       $data['id']=$id;
+       $data['flag']=1;
+       $data['size']=$res['size'];
+       $data['pic']=$res['path'];
+       $this->imgsmodel->updateimginfoByData($data,'admin');
+       echo $access_tokeninfo['uid'].'_'.$key.$imginfo['ext'];exit;
+     }
+//var_dump($res);exit;
+    }
+//var_dump($res);exit;
     die(json_encode($key));
   }
-	public function upload()
+  public function upload()
 	{
 		$seqcode=$this->input->get('seq');
 		$seq='';

@@ -66,6 +66,10 @@ if (preg_match("/MSIE/", $ua)) {
    header('Content-Disposition: attachment; filename="' . $filename . '"');
  }
 }
+header('cache-control: must-revalidate');
+$offset = 60 * 60 * 24 * 7;//缓存距离现在的过期时间，这里设置为一天
+$expire = 'expires: ' . gmdate('D, d M Y H:i:s', time() + $offset) . ' GMT';
+header($expire);
 header("Content-Length: $size");
 echo $data;
 ?>
