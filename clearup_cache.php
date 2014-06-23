@@ -21,4 +21,4 @@ foreach($cache_list as $v){
 # exit;
 }
 
-echo "clearUp is OK!\n";
+echo date('Y-m-d H:i:s')," clearUp is OK!\n";

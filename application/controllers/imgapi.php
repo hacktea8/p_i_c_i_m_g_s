@@ -158,6 +158,9 @@ class Imgapi extends CI_Controller {
                 $imgurl = 'cache/images/ed2k'.basename($imgurl);
                 file_put_contents($imgurl, $html);
                 chmod($imgurl, 0777);
+                if( !file_exists($imgurl) || filesize($imgurl) < 2000){
+                  die('0');
+                }
                 $cmd = "convert {$imgurl} {$imgurl}";
                 exec($cmd);
                 $imghtml = file_get_contents($imgurl);

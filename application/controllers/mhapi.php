@@ -45,6 +45,9 @@ class Mhapi extends CI_Controller {
                 $imgurl = 'cache/images/ed2kmh'.basename($imgurl);
                 file_put_contents($imgurl, $html);
                 chmod($imgurl, 0777);
+                if( !file_exists($imgurl) || filesize($imgurl) < 2000){
+                  die('0');
+                }
                 $cmd = "convert {$imgurl} {$imgurl}";
                 exec($cmd);
                 chmod($imgurl, 0777);

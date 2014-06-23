@@ -1,10 +1,9 @@
 */config/development
 */logs/log-*.php
 */logs/!index.html
-*/cache/*
-*/cache/!index.html
 *.htaccess
 *.bak
+*cache/images/!index.html
 application/tmp/*
 application/config/database.php
 application/config/config.php

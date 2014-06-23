@@ -46,9 +46,12 @@ class Fileapi extends CI_Controller {
                 $html =  file_get_contents($imgurl, false, $context);
                 $imgurl = 'cache/images/btv'.$imginfo['title'];
                 file_put_contents($imgurl, $html);
+         chmod($imgurl, 0777);
+         if(!file_exists($imgurl) || filesize($imgurl) <2000){
+           die('0');
+         }
          if(in_array($imginfo['ext'],$this->allowext)){
            $imgurl_w = 'cache/images/btvw'.$imginfo['title'];
-           chmod($imgurl, 0777);
            $cmd = "convert {$imgurl} {$imgurl}";
            exec($cmd);
            $water = 'public/images/water/btvwater.jpg';
@@ -59,7 +62,6 @@ class Fileapi extends CI_Controller {
            $imghtml = file_get_contents($imgurl_w);
            unlink($imgurl_w);
          }else{
-           chmod($imgurl, 0777);
            $imghtml = file_get_contents($imgurl);
 //exit;
          }
