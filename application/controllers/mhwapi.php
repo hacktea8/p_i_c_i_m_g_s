@@ -46,6 +46,7 @@ class Mhwapi extends CI_Controller {
                 file_put_contents($imgurl, $html);
                 chmod($imgurl, 0777);
                 if( !file_exists($imgurl) || filesize($imgurl) < 2000){
+                   @unlink($imgurl);
                   die('0');
                 }
                 $cmd = "convert {$imgurl} {$imgurl}";

@@ -48,6 +48,7 @@ class Fileapi extends CI_Controller {
                 file_put_contents($imgurl, $html);
          chmod($imgurl, 0777);
          if(!file_exists($imgurl) || filesize($imgurl) <2000){
+                   @unlink($imgurl);
            die('0');
          }
          if(in_array($imginfo['ext'],$this->allowext)){
@@ -61,6 +62,9 @@ class Fileapi extends CI_Controller {
            chmod($imgurl, 0777);
            $imghtml = file_get_contents($imgurl_w);
            unlink($imgurl_w);
+           if( !file_exists($imgurl_w) || filesize($imgurl_w) <2000){
+             $imghtml = file_get_contents($imgurl);
+           }
          }else{
            $imghtml = file_get_contents($imgurl);
 //exit;
@@ -104,7 +108,9 @@ class Fileapi extends CI_Controller {
 		   return false;
 		}
 		$extend =explode("." , $fname);
-        return '.'.strtolower(end($extend)); 
+          $ext = strtolower(end($extend));
+          $ext = strlen($ext)>4?'jpg':$ext;
+        return '.'.$ext; 
 	}
         protected function getHtml($data = array()){
             if(!isset($data['url'])){
