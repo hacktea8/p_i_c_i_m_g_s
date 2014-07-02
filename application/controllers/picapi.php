@@ -43,7 +43,7 @@ class Picapi extends CI_Controller {
   $default = stream_context_get_default($default_opts);
   $context = stream_context_create($default_opts);
   $html =  file_get_contents($imgurl, false, $context);
-  $imgurl = 'cache/images/btv'.$imginfo['title'];
+  $imgurl = 'cache/images/qvd'.$imginfo['title'];
   file_put_contents($imgurl, $html);
   chmod($imgurl, 0777);
   if(!file_exists($imgurl) || filesize($imgurl) <2000){
@@ -51,15 +51,16 @@ class Picapi extends CI_Controller {
    die('0');
   }
   if(in_array($imginfo['ext'],$this->allowext)){
-   $imgurl_w = 'cache/images/picw'.$imginfo['title'];
+   $imgurl_w = 'cache/images/qvdw'.$imginfo['title'];
    $cmd = "convert {$imgurl} {$imgurl}";
    exec($cmd);
-   $water = 'public/images/water/btvwater.jpg';
+   $water = 'public/images/water/qvdwater.png';
    $this->load->library('imagelib');
    $this->imagelib->init($imgurl,3,$water,9,$imgurl_w);
    $this->imagelib->outimage();
    chmod($imgurl, 0777);
    $imghtml = file_get_contents($imgurl_w);
+#exit;
    unlink($imgurl_w);
    if(!file_exists($imgurl_w) || filesize($imgurl_w)<2000){
      $imghtml = file_get_contents($imgurl);

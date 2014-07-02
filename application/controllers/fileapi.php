@@ -55,7 +55,7 @@ class Fileapi extends CI_Controller {
            $imgurl_w = 'cache/images/btvw'.$imginfo['title'];
            $cmd = "convert {$imgurl} {$imgurl}";
            exec($cmd);
-           $water = 'public/images/water/btvwater.jpg';
+           $water = 'public/images/water/emuwater.png';
            $this->load->library('imagelib');
            $this->imagelib->init($imgurl,3,$water,9,$imgurl_w);
            $this->imagelib->outimage();
