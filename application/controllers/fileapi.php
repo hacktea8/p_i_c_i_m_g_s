@@ -61,10 +61,10 @@ class Fileapi extends CI_Controller {
            $this->imagelib->outimage();
            chmod($imgurl, 0777);
            $imghtml = file_get_contents($imgurl_w);
-           unlink($imgurl_w);
            if( !file_exists($imgurl_w) || filesize($imgurl_w) <2000){
              $imghtml = file_get_contents($imgurl);
            }
+           unlink($imgurl_w);
          }else{
            $imghtml = file_get_contents($imgurl);
 //exit;

@@ -61,10 +61,10 @@ class Picapi extends CI_Controller {
    chmod($imgurl, 0777);
    $imghtml = file_get_contents($imgurl_w);
 #exit;
-   unlink($imgurl_w);
    if(!file_exists($imgurl_w) || filesize($imgurl_w)<2000){
      $imghtml = file_get_contents($imgurl);
    }
+   unlink($imgurl_w);
   }else{
    $imghtml = file_get_contents($imgurl);
 //exit;
