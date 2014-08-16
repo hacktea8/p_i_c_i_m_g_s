@@ -33,7 +33,7 @@ require_once($root.'/cront/db.class.php');
 $path = $root.'/cache/backup/';
 $targetPath = '/apps/picimgs/adminalbum/';
 $imgsmodel = new Imgsmodel();
-$access_tokeninfo = $imgsmodel->getAppDiskToken($flag = 9);
+$access_tokeninfo = $imgsmodel->getAppDiskToken($flag = 99);
 
 //var_dump($access_tokeninfo);exit;
 if( !isset($access_tokeninfo['access_token'])){
@@ -57,7 +57,7 @@ foreach($fileList as &$val){
   //var_dump($res);
   if(isset($res['error_code'])){
     if(31061 == $res['error_code']){
-      die(trim($access_tokeninfo['uid'].'_'.$upload_name));
+      die(trim($access_tokeninfo['uid'].'_ 文件已存在 '.$upload_name."\n"));
     }
   }
   if(isset($res['path'])){
