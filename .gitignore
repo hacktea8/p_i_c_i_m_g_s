@@ -5,5 +5,3 @@
 *.bak
 *cache/*
 application/tmp/*
-application/config/database.php
-application/config/config.php
