@@ -23,26 +23,28 @@ function getextname($fname=''){
 }
 require_once($root.'/application/libraries/Baidupcs.php');
 require_once($root.'/cront/db.class.php');
-$info=explode('_',$key);
+
+$imgsmodel = new Imgsmodel();
+$info = explode('_',$key);
 //var_dump($key);exit;
-$uid=$info[0];
-$path=$info[1];
-$path=$imgpath.$path;
-$imgsmodel=new Imgsmodel();
-$access_tokeninfo=$imgsmodel->getAppDiskToken($uid);
+$uid = $info[0];
+$path = $info[1];
+$access_tokeninfo = $imgsmodel->getAppDiskToken($uid);
 if(!isset($access_tokeninfo['access_token'])){
    return false;
 }
+$imgpath = $imgpath ? $imgpath : $access_tokeninfo['path'];
+$path = $imgpath.$path;
 //var_dump($access_tokeninfo);exit;
-$baidupcs=new Baidupcs();
+$baidupcs = new Baidupcs();
 $baidupcs->setAccessToken($access_tokeninfo['access_token']);
-$data=$baidupcs->download($path);
-$type=getextname($path);
+$data = $baidupcs->download($path);
+$type = getextname($path);
 //var_dump($data);exit;
 ob_start();
 ob_clean();
-$width=isset($_GET['w'])?intval($_GET['w']):'';
-$height=isset($_GET['h'])?intval($_GET['h']):'';
+$width = isset($_GET['w'])?intval($_GET['w']):'';
+$height = isset($_GET['h'])?intval($_GET['h']):'';
 if($width || $height){
 require_once 'thumbClass.php';
 $imgh = new thumbClass($data,$type,1,$width,$height);

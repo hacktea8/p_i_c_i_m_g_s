@@ -1,11 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Webbase extends CI_Controller {
-     public $viewData = array();
-     protected $userInfo = array();
-     public $adminList = array(1);
-     protected $isadmin = 0;
+  public $viewData = array();
+  protected $userInfo = array();
+  public $adminList = array(1);
+  protected $isadmin = 0;
+  public $mem = '';
+  public $redis = '';
 
-     public function __construct(){
+  public function __construct(){
 	parent::__construct();
 	$this->load->model('imgsmodel');
 	$this->load->model('usermodel');
