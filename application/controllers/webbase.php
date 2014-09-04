@@ -1,5 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Webbase extends CI_Controller {
+  public $ttl = array('5m'=>300,'15m'=>900,'30m'=>1800,'1h'=>3600,'3h'=>10800,'6h'=>21600,'9h'=>32400,'12h'=>43200,'1d'=>86400,'3d'=>253200,'5d'=>432000,'7d'=>604800);
   public $viewData = array();
   protected $userInfo = array();
   public $adminList = array(1);
@@ -8,27 +9,27 @@ class Webbase extends CI_Controller {
   public $redis = '';
 
   public function __construct(){
-	parent::__construct();
-	$this->load->model('imgsmodel');
-	$this->load->model('usermodel');
-        $this->userInfo = $this->session->userdata('user_logindata');
-        if(empty($userInfo)){
-           //解析UID
-           $uinfo = getSynuserUid();
-           if($uinfo){
-             $this->userInfo['uname'] = $uinfo['uname'];
-             $uinfo = getSynuserInfo($uinfo['uid']);
-             $uinfo['uname'] = $this->userInfo['uname'];
-             $uinfo = $this->usermodel->getUserInfo($uinfo);
-             if($uinfo){
-               $this->userInfo = array_merge($this->userInfo,$uinfo);
-               $this->userInfo['isadmin'] = $this->checkIsadmin($return = 1);
-               $this->session->set_userdata(array('user_logindata'=>$this->userInfo));
-             }
-          }
-        }else{
-          $this->userInfo = $userInfo;
-        }
+   parent::__construct();
+   $this->load->model('imgsmodel');
+   $this->load->model('usermodel');
+   $this->userInfo = $this->session->userdata('user_logindata');
+   if(empty($userInfo)){
+     //解析UID
+     $uinfo = getSynuserUid();
+     if($uinfo){
+       $this->userInfo['uname'] = $uinfo['uname'];
+       $uinfo = getSynuserInfo($uinfo['uid']);
+       $uinfo['uname'] = $this->userInfo['uname'];
+       $uinfo = $this->usermodel->getUserInfo($uinfo);
+       if($uinfo){
+         $this->userInfo = array_merge($this->userInfo,$uinfo);
+         $this->userInfo['isadmin'] = $this->checkIsadmin($return = 1);
+         $this->session->set_userdata(array('user_logindata'=>$this->userInfo));
+       }
+     }
+   }else{
+     $this->userInfo = $userInfo;
+   }
 //var_dump($this->userInfo);exit;
         $this->setviewData(array('seo_title'=>'','seo_keywords'=>'','seo_description'=>'','base_url'=>$this->config->item('base_url'),'domain_name'=>'',
 	'site_name'=>'图享网'));
