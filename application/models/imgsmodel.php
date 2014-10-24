@@ -179,14 +179,17 @@ class Imgsmodel extends baseModel {
    }
 
    function getYundiskInfoList($p,$limit=20){
-     $p=($p-1)*$limit;
-     $sql=sprintf('SELECT * FROM `appdisk` ORDER BY `sort` LIMIT %d,%d ',$p,$limit);
-	 $query=$this->db->query($sql);
-     $res=$query->result_array();
-	 if($res){
-	    return $res;
-	 }
-	 return array();
+    $p = ($p-1)*$limit;
+    $sql = sprintf('SELECT * FROM `appdisk` ORDER BY `sort` LIMIT %d,%d ',$p,$limit);
+    $query = $this->db->query($sql);
+    $res = $query->result_array();
+    if($res){
+     foreach($res as &$v){
+      $v['utime'] = date('Y-m-d H:i:s',$v['utime']);
+     }
+     return $res;
+    }
+    return array();
    }
    function getYundiskCount(){
      $sql=sprintf('SELECT count(*) as total FROM `appdisk` ');
@@ -236,18 +239,19 @@ class Imgsmodel extends baseModel {
 	  }
    }
    function setAppDiskToken($data){
-      if(!isset($data['uid'])){
-	      return false;
-	  }
-      $row=$this->getAppDiskToken($data['uid']);
-	  if(isset($row['uid'])){
-	     $uid=$data['uid'];
-		 unset($data['uid']);
-         $this->db->update('appdisk', $data, array('uid' => $uid));
-         return $uid;
-	  }else{
-	     $this->db->insert('appdisk', $data); 
-	  }
+    if(!isset($data['uid'])){
+     return false;
+    }
+    $data['utime'] = time();
+    $row = $this->getAppDiskToken($data['uid']);
+    if(isset($row['uid'])){
+     $uid = $data['uid'];
+     unset($data['uid']);
+     $this->db->update('appdisk', $data, array('uid' => $uid));
+     return $uid;
+    }else{
+     $this->db->insert('appdisk', $data); 
+    }
    }
    function getAppDiskToken($uid=''){
 	   $where=' ORDER BY sort ';

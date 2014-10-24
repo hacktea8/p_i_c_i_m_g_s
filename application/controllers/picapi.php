@@ -1,8 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-class Picapi extends CI_Controller {
+require_once 'picbase.php';
+class Picapi extends Picbase {
  public $targetPath='/apps/picimgs/admattach/';
  public $allowext=array('.gif','.jpg','.jpeg','.png','.bmp');
+ public function __construct(){
+  parent::__construct();
+  $this->getProxy();
+ }
  public function uploadurl(){
   $seqcode=$this->input->get('seq');
   $seq='';
