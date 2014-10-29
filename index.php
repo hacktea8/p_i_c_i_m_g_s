@@ -73,6 +73,7 @@ if (defined('ENVIRONMENT'))
  * NO TRAILING SLASH!
  *
  */
+    define('ROOTPATH',dirname(__FILE__).'/');
 	$application_folder = 'application';
 
 /*
