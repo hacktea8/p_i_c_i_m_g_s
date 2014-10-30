@@ -5,4 +5,5 @@
 *.bak
 *.sql*
 cache/images/
+cache/backup/
 application/tmp/*

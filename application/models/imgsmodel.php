@@ -43,6 +43,17 @@ class Imgsmodel extends baseModel {
 	   }
 	   return $query->result_array();
    }
+  function getAllAPPTokenList(){
+   $sql = 'SELECT * FROM `appdisk` ';
+   $query = $this->db->query($sql);
+   $r = array();
+   $list = $query->result_array();
+   $list = $list?$list:array();
+   foreach($list as $v){
+    $r[$v['uid']] = $v;
+   }
+   return $r;
+  }
    function getimginfoById($id='',$type='admin'){
        if(!$id){
 	      return false;
