@@ -4,5 +4,5 @@
 *.htaccess
 *.bak
 *.sql*
-cache/!index.html
+cache/images/
 application/tmp/*

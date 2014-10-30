@@ -21,15 +21,56 @@ function getextname($fname=''){
    $extend =explode('.' , $fname);
    return strtolower(end($extend));
 }
-require_once($root.'/application/libraries/Baidupcs.php');
-require_once($root.'/cront/db.class.php');
+function trimBOM ($contents) {
+ $charset = array();
+ $charset[1] = substr($contents, 0, 1);
+ $charset[2] = substr($contents, 1, 1);
+ $charset[3] = substr($contents, 2, 1);
+ if (ord($charset[1]) == 239 && ord($charset[2]) == 187 && ord($charset[3]) == 191) {
+   return substr($contents, 3);
+ }
+ return $contents;
+}
+function getBdTokenByAPI(){
+ $opts = array(
+  'http'=>array(
+  'method'=>"GET",
+  'timeout'=>30,
+  )
+ );
+ $context = stream_context_create($opts);
+ $html = file_get_contents('http://img.hacktea8.com/api/getAppTokenList', false, $context);
+ $token = json_decode(trimBOM($html), 1);
+ return $token;
+ var_dump($html);
+ var_dump($token);exit;
+}
 
-$imgsmodel = new Imgsmodel();
 $info = explode('_',$key);
 //var_dump($key);exit;
 $uid = $info[0];
 $path = $info[1];
-$access_tokeninfo = $imgsmodel->getAppDiskToken($uid);
+
+$site = 0;
+
+require_once($root.'/application/libraries/Baidupcs.php');
+
+if($site){
+ require_once($root.'/cront/db.class.php');
+ $imgsmodel = new Imgsmodel();
+ $access_tokeninfo = $imgsmodel->getAppDiskToken($uid);
+}else{
+ require_once $root.'/application/libraries/memcached.php';
+ $mem = new Memcached();
+ $key = 'get_all_bdapp_token';
+ $allToken = $mem->get($key);
+ if( !$allToken){
+  $allToken = getBdTokenByAPI();
+  $mem->set($key,$allToken,86400);
+ }
+ $access_tokeninfo = $allToken[$uid];
+}
+
 if(!isset($access_tokeninfo['access_token'])){
    return false;
 }
