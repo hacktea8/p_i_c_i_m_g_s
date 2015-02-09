@@ -5,7 +5,7 @@ class Picapi extends Picbase {
  public $allowext=array('.gif','.jpg','.jpeg','.png','.bmp');
  public function __construct(){
   parent::__construct();
-  $this->getProxy();
+  //$this->getProxy();
  }
  public function uploadurl(){
   $seqcode=$this->input->get('seq');
@@ -59,22 +59,27 @@ class Picapi extends Picbase {
    $cmd = "convert {$imgurl} {$imgurl}";
    exec($cmd);
    $water = 'public/images/water/qvdwater.png';
+/*
    $this->load->library('imagelib');
    $this->imagelib->init($imgurl,3,$water,9,$imgurl_w);
    $this->imagelib->outimage();
-   chmod($imgurl, 0777);
+*/
+   $this->load->library('gickimg');
+//var_dump($this->gickimg);exit;
+   $this->gickimg->waterMark($imgurl,$water,$imgurl_w);
+   @chmod($imgurl_w, 0777);
    $imghtml = file_get_contents($imgurl_w);
 #exit;
    if(!file_exists($imgurl_w) || filesize($imgurl_w)<2000){
      $imghtml = file_get_contents($imgurl);
    }
-   unlink($imgurl_w);
+   @unlink($imgurl_w);
   }else{
    $imghtml = file_get_contents($imgurl);
 //exit;
   }
   $imginfo['hash'] = md5_file($imgurl);
-  unlink($imgurl);
+  @unlink($imgurl);
 //exit;//var_dump($imginfo);exit;
   $check=$this->imgsmodel->getfileinfoById($imginfo['hash'],'admin');
   $key = isset($check['id'])?$check['id']:0;

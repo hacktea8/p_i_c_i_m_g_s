@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+// free link https://t.williamgates.net/
 
 class Ttkapi extends CI_Controller {
  static public $key = array(
@@ -50,17 +51,19 @@ class Ttkapi extends CI_Controller {
    die(json_encode($err));
   }
   if(in_array($imginfo['ext'], self::$allowext)){
-   $imgurl_w = ROOTPATH.'cache/images/ttkw'.$imginfo['title'];
-   $cmd = "convert {$imgurl} {$imgurl}";
+   $imgurl_w = ROOTPATH.'cache/images/ttkw'.$imginfo['title'].'.jpg';
+   $imgurl_jpg = $imgurl.'.jpg';
+   $cmd = "convert {$imgurl} {$imgurl_jpg}";
    @exec($cmd);
+   @unlink($imgurl);
    $water = ROOTPATH.'public/images/water/emuwater.png';
    $this->load->library('gickimg');
 //var_dump($this->gickimg);exit;
-   $this->gickimg->waterMark($imgurl,$water,$imgurl_w);
+   $this->gickimg->waterMark($imgurl_jpg,$water,$imgurl_w);
    @chmod($imgurl_w, 0777);
    $upFile = &$imgurl_w;
    if( !file_exists($imgurl_w) || filesize($imgurl_w) <2000){
-    $upFile = &$imgurl;
+    $upFile = &$imgurl_jpg;
     @unlink($imgurl_w);
    }
   }else{
@@ -103,7 +106,7 @@ class Ttkapi extends CI_Controller {
   //var_dump($json);exit;
   $iurl = @$json['linkurl'];
   if( !$iurl){
-   $err['msg'] = 'save file failed';
+   $err['msg'] = 'save file failed'.json_encode($json);
    die(json_encode($err));
   }
   $r = self::parse_info($iurl);

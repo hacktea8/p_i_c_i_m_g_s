@@ -1,5 +1,4 @@
 <?php
-date_default_timezone_set('PRC');
 
 //1262499086@qq.com
 include_once('TieTuKu.class.php');

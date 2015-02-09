@@ -30,7 +30,7 @@ require_once($root.'/application/libraries/Baidupcs.php');
 require_once($root.'/cront/db.class.php');
 
 //var_dump($key);exit;
-$path = $root.'/cache/backup/';
+$path = '/data/backup/';
 $targetPath = '/apps/picimgs/adminalbum/';
 $imgsmodel = new Imgsmodel();
 $access_tokeninfo = $imgsmodel->getAppDiskToken($flag = 99);

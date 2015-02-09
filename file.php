@@ -51,7 +51,7 @@ $info = explode('_',$key);
 $uid = $info[0];
 $path = $info[1];
 
-$site = 0;
+$site = 1;
 
 require_once($root.'/application/libraries/Baidupcs.php');
 
